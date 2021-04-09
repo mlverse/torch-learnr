@@ -6,6 +6,7 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
+library(torch)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -83,3 +84,97 @@ Torch also provides higher level abstractions that make it easier to build large
 -   **Datasets**: an abstraction for loading data in torch. It allows handling data that you might not be able to load entirely into a single tensor because of memory limitations.
 
 -   **Dataloaders**: simplifies loading a dataset into batches and allows distributing data-loading into multiple processes.
+
+## Creating tensors {data-progressive=TRUE}
+
+Tensors are the core data structure in torch.
+
+### From R objects
+
+Tensors can be created from R atomic vectors, matrices and arrays suing the `torch_tensor` function:
+
+```{r atomic, exercise=TRUE, exercise.eval=TRUE}
+x <- torch_tensor(c(1,2,3))
+x
+```
+
+```{r matrix, exercise=TRUE, exercise.eval=TRUE}
+m <- matrix(runif(6), nrow = 2)
+x <- torch_tensor(m)
+x
+```
+
+```{r array, exercise=TRUE, exercise.eval=TRUE}
+a <- array(runif(12), dim = c(2, 3, 2))
+x <- torch_tensor(a)
+x
+```
+
+### Using initialization functions
+
+Tensors can also be created using torch initialization functions.
+The first argument for most initialization functions is a sequence of integers indicating the shape of the tensor.
+
+```{r randn, exercise=TRUE, exercise.eval=TRUE}
+x <- torch_randn(2,2)
+x
+```
+
+Other functions to create tensors are:
+
+- `torch_arange`: Returns a tensor with a sequence of integers,
+- `torch_full`: Returns a tensor filled with a single value,
+- `torch_ones`: Returns a tensor filled with all ones,
+- `torch_rand`: Returns a tensor filled with values drawn from a uniform distribution on [0, 1).
+- `torch_randn`: Returns a tensor filled with values drawn from a unit normal distribution,
+- `torch_zeros`: Returns a tensor filled with all zeros.
+
+You can see the full list [here](https://torch.mlverse.org/docs/articles/tensor-creation.html#using-creation-functions-1)
+
+Feel free to experiment with other initialization function below:
+
+```{r experiment, exercise=TRUE, exercise.eval=TRUE}
+
+
+
+```
+
+## Tensor attributes
+
+Every tensor has a few attributes that determine how data is stored in the computer. The most important attribute are described below:
+
+<!-- <div class = "row"> -->
+<!-- <div class="col-md-6"></div> -->
+<!-- <div class="col-md-6"></div> -->
+<!-- </div> -->
+
+<div class = "row">
+<div class="col-md-6">
+- **data type**: describes how the bytes in the fixed-size block of memory corresponding to an array item should be interpreted. For example: int, float, double, etc.
+- **device**: describes in which device the memory corresponding to that tensor lives. For example: a **cuda** device or **cpu**.
+- **dimensions**: describes the shape of the tensor.
+- **requires_grad**: a flag indicating if operations on that tensor should be recorded to allow autograd in the future.
+</div>
+<div class="col-md-6">
+![Tensor attributes.](images/tensor.png){width="100%"}
+</div>
+</div>
+
+Tensor's attributes can be accessed using the `$` operator:
+
+```{r dtype, exercise=TRUE, exercise.eval=TRUE}
+x <- torch_randn(2,2)
+x$dtype
+```
+
+```{r device, exercise=TRUE, exercise.eval=TRUE}
+x$device
+```
+
+```{r shape, exercise=TRUE, exercise.eval=TRUE}
+x$shape
+```
+
+```{r req_grad, exercise=TRUE, exercise.eval=TRUE}
+x$requires_grad
+```
