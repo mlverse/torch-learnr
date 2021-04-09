@@ -139,7 +139,7 @@ Feel free to experiment with other initialization function below:
 
 ```
 
-## Tensor attributes
+## Tensor attributes {data-progressive=TRUE}
 
 Every tensor has a few attributes that determine how data is stored in the computer. The most important attribute are described below:
 
@@ -160,6 +160,8 @@ Every tensor has a few attributes that determine how data is stored in the compu
 </div>
 </div>
 
+### Accessing attributes
+
 Tensor's attributes can be accessed using the `$` operator:
 
 ```{r dtype, exercise=TRUE, exercise.eval=TRUE}
@@ -178,3 +180,43 @@ x$shape
 ```{r req_grad, exercise=TRUE, exercise.eval=TRUE}
 x$requires_grad
 ```
+
+### Modifying attributes
+
+The default tensor attributes can be modified when creating the tensors or using the `$to` method. 
+
+```{r cre, exercise=TRUE, exercise.eval=TRUE}
+x <- torch_randn(2,2, dtype = torch_float64())
+x
+```
+
+```{r to, exercise=TRUE, exercise.eval=TRUE}
+x <- torch_randn(2,2)
+x <- x$to(dtype = torch_float16())
+x
+```
+
+The `$to` method creates a copy of that tensor with modified attributes.
+
+### CUDA devices
+
+Moving between devices is also done with the `$to` method, but devices only `cpu` devices are available to all systems. CUDA devices are only available if your system is equipped with a GPU.
+You can check if they are available with:
+
+```{r cuda, exercise=TRUE, exercise.eval=TRUE}
+cuda_is_available()
+```
+
+A common pattern in torch is to create a device object at the beginning of your script and reuse it as you create and move tensors. For example:
+
+```{r cuda2, exercise=TRUE, exercise.eval=TRUE}
+device <- if (cuda_is_available()) "cuda" else "cpu"
+
+x <- torch_randn(2, 2, device = device)
+y <- x$to(device = device)
+```
+
+
+
+
+
