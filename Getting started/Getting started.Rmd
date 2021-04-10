@@ -7,6 +7,8 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 library(torch)
+set.seed(1)
+torch_manual_seed(1)
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -151,7 +153,7 @@ Every tensor has a few attributes that determine how data is stored in the compu
 <div class = "row">
 <div class="col-md-6">
 - **data type**: describes how the bytes in the fixed-size block of memory corresponding to an array item should be interpreted. For example: int, float, double, etc.
-- **device**: describes in which device the memory corresponding to that tensor lives. For example: a **cuda** device or **cpu**.
+- **device**: describes in which device the memory corresponding to that tensor lives. For example: a **cuda** device or **cpu**. Operations on tensors happens on the device it's located.
 - **dimensions**: describes the shape of the tensor.
 - **requires_grad**: a flag indicating if operations on that tensor should be recorded to allow autograd in the future.
 </div>
@@ -200,7 +202,7 @@ The `$to` method creates a copy of that tensor with modified attributes.
 
 ### CUDA devices
 
-Moving between devices is also done with the `$to` method, but devices only `cpu` devices are available to all systems. CUDA devices are only available if your system is equipped with a GPU.
+Moving between devices is also done with the `$to` method, but devices only `cpu` devices are available to all systems. CUDA devices are only available if your system is equipped with a compatible GPU.
 You can check if they are available with:
 
 ```{r cuda, exercise=TRUE, exercise.eval=TRUE}
@@ -216,7 +218,16 @@ x <- torch_randn(2, 2, device = device)
 y <- x$to(device = device)
 ```
 
+Moving between devices is an important operation because tensor operations happens in the device the
+tensor is located, so if you want to use the fast GPU implementations, you need to move tensors to the CUDA device.
+
+### Exercise
+
+Create a tensor with the `torch_bool()` data type and cast it to `torch_double()` type using the `$to()` method.
+
+```{r booldouble, exercise=TRUE, exercise.eval=FALSE}
 
 
 
+```
 
