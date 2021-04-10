@@ -96,18 +96,18 @@ Tensors are the core data structure in torch.
 
 Tensors can be created from R atomic vectors, matrices and arrays suing the `torch_tensor` function:
 
-```{r atomic, exercise=TRUE, exercise.eval=TRUE}
+```{r atomic, exercise=TRUE}
 x <- torch_tensor(c(1,2,3))
 x
 ```
 
-```{r matrix, exercise=TRUE, exercise.eval=TRUE}
+```{r matrix, exercise=TRUE}
 m <- matrix(runif(6), nrow = 2)
 x <- torch_tensor(m)
 x
 ```
 
-```{r array, exercise=TRUE, exercise.eval=TRUE}
+```{r array, exercise=TRUE}
 a <- array(runif(12), dim = c(2, 3, 2))
 x <- torch_tensor(a)
 x
@@ -118,7 +118,7 @@ x
 Tensors can also be created using torch initialization functions.
 The first argument for most initialization functions is a sequence of integers indicating the shape of the tensor.
 
-```{r randn, exercise=TRUE, exercise.eval=TRUE}
+```{r randn, exercise=TRUE}
 x <- torch_randn(2,2)
 x
 ```
@@ -136,7 +136,7 @@ You can see the full list [here](https://torch.mlverse.org/docs/articles/tensor-
 
 Feel free to experiment with other initialization function below:
 
-```{r experiment, exercise=TRUE, exercise.eval=TRUE}
+```{r experiment, exercise=TRUE}
 
 
 
@@ -167,20 +167,20 @@ Every tensor has a few attributes that determine how data is stored in the compu
 
 Tensor's attributes can be accessed using the `$` operator:
 
-```{r dtype, exercise=TRUE, exercise.eval=TRUE}
+```{r dtype, exercise=TRUE}
 x <- torch_randn(2,2)
 x$dtype
 ```
 
-```{r device, exercise=TRUE, exercise.eval=TRUE}
+```{r device, exercise=TRUE, exercise.setup="dtype"}
 x$device
 ```
 
-```{r shape, exercise=TRUE, exercise.eval=TRUE}
+```{r shape, exercise=TRUE, exercise.setup="dtype"}
 x$shape
 ```
 
-```{r req_grad, exercise=TRUE, exercise.eval=TRUE}
+```{r req_grad, exercise=TRUE, exercise.setup="dtype"}
 x$requires_grad
 ```
 
@@ -188,12 +188,12 @@ x$requires_grad
 
 The default tensor attributes can be modified when creating the tensors or using the `$to` method. 
 
-```{r cre, exercise=TRUE, exercise.eval=TRUE}
+```{r cre, exercise=TRUE}
 x <- torch_randn(2,2, dtype = torch_float64())
 x
 ```
 
-```{r to, exercise=TRUE, exercise.eval=TRUE}
+```{r to, exercise=TRUE}
 x <- torch_randn(2,2)
 x <- x$to(dtype = torch_float16())
 x
@@ -206,13 +206,13 @@ The `$to` method creates a copy of that tensor with modified attributes.
 Moving between devices is also done with the `$to` method, but devices only `cpu` devices are available to all systems. CUDA devices are only available if your system is equipped with a compatible GPU.
 You can check if they are available with:
 
-```{r cuda, exercise=TRUE, exercise.eval=TRUE}
+```{r cuda, exercise=TRUE}
 cuda_is_available()
 ```
 
 A common pattern in torch is to create a device object at the beginning of your script and reuse it as you create and move tensors. For example:
 
-```{r cuda2, exercise=TRUE, exercise.eval=TRUE}
+```{r cuda2, exercise=TRUE}
 device <- if (cuda_is_available()) "cuda" else "cpu"
 
 x <- torch_randn(2, 2, device = device)
@@ -241,20 +241,92 @@ instead it selects starting from the end. We decided for this behavior because i
 
 Considering a tensor with:
 
-```{r index1, exercise=TRUE, exercise.eval=TRUE, exercise.lines = 2}
+```{r index1, exercise=TRUE}
 x <- torch_tensor(1:5)
 x
 ```
 
-```{r index2, exercise=TRUE, exercise.eval=TRUE, exercise.lines=2}
+```{r index2, exercise=TRUE, exercise.setup="index1"}
 # takes the first element
 x[1]
 ```
 
-```{r index3, exercise=TRUE, exercise.eval=TRUE, exercise.lines=2}
+```{r index3, exercise=TRUE, exercise.setup="index1"}
 # negative index: take the first element starting from end, ie. last element
 x[-1]
 ```
+
+### Selecting intervals
+
+Torch also supports indexing tensors by intervals by boolean and integer tensors and by R vectors.
+See the examples below:
+
+```{r index4, exercise=TRUE}
+x <- torch_tensor(1:5)
+x
+```
+
+```{r index5, exercise=TRUE, exercise.setup="index4"}
+# selecting the first 3 elements
+x[1:3]
+```
+
+```{r index6, exercise=TRUE, exercise.setup="index4"}
+# selecting the from the third element until the end. the `N` syntax is syntax sugar for the last index
+x[3:N]
+```
+
+```{r index7, exercise=TRUE, exercise.setup="index4"}
+# selecting the last 2 elements
+x[-2:N]
+```
+
+```{r index8, exercise=TRUE, exercise.setup="index4"}
+# selecting using a boolean tensor
+x[x>2]
+```
+
+### Multi-dimensional selections
+
+When indexing a tensor with multiple dimensions, you can use a different indexes separating by commas, just like in R. For example:
+
+```{r index9, exercise=TRUE}
+x <- torch_randn(2, 2, 3)
+dim(x)
+```
+
+```{r index10, exercise=TRUE, exercise.setup = "index9"}
+# selecting the first element in every dimension
+x[1, 1, 1]
+```
+
+```{r index11, exercise=TRUE, exercise.setup = "index9"}
+# you can select everything from a dimension by using an empty argument.
+x[,,1]
+```
+
+```{r index12, exercise=TRUE, exercise.setup = "index9"}
+# you can use .. when you want to take all elements from all dimensions until the last.
+x[..,1]
+```
+
+```{r index13, exercise=TRUE, exercise.setup = "index9"}
+# you can also add a new dimension using the `newaxis` sugar
+x[..,newaxis]
+```
+
+```{r index14, exercise=TRUE, exercise.setup = "index9"}
+# by default when you select a single element from a dimension, it's dropped. 
+# you can change this behavior by setting drop = FALSE
+x[1,..,drop=FALSE]
+```
+
+```{r index15, exercise=TRUE, exercise.setup = "index9"}
+# subset assignment is also supported
+x[1,1,1] <- 0
+x[1,1,1]
+```
+
 
 
 
