@@ -231,3 +231,30 @@ Create a tensor with the `torch_bool()` data type and cast it to `torch_double()
 
 ```
 
+## Indexing tensors {data-progressive=TRUE}
+
+Indexing tensors in torch is very similar to indexing vectors, matrices and arrays in R with an important difference when using **negative** indexes.
+
+In torch negative indexes don't remove the element,
+instead it selects starting from the end. We decided for this behavior because it seems that selecting starting from the end is more frequently used than removing elements in torch applications.
+
+Considering a tensor with:
+
+```{r index1, exercise=TRUE, exercise.eval=TRUE, exercise.lines = 2}
+x <- torch_tensor(1:5)
+x
+```
+
+```{r index2, exercise=TRUE, exercise.eval=TRUE, exercise.lines=2}
+# takes the first element
+x[1]
+```
+
+```{r index3, exercise=TRUE, exercise.eval=TRUE, exercise.lines=2}
+# negative index: take the first element starting from end, ie. last element
+x[-1]
+```
+
+
+
+
