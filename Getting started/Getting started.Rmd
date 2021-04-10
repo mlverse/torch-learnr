@@ -5,6 +5,7 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
+Sys.setenv(TORCH_INSTALL=1)
 library(learnr)
 library(torch)
 set.seed(1)
