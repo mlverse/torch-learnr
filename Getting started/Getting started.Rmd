@@ -8,6 +8,8 @@ runtime: shiny_prerendered
 Sys.setenv(TORCH_INSTALL=1)
 library(learnr)
 library(torch)
+library(ggplot2)
+library(tibble)
 set.seed(1)
 torch_manual_seed(1)
 knitr::opts_chunk$set(echo = FALSE)
@@ -421,7 +423,7 @@ torch_ones(2,3) + torch_tensor(c(1,2))
 torch_ones(10,1) + torch_tensor(runif(10))
 ```
 
-## What's Autograd?
+## What's Autograd? {data-progressive=TRUE}
 
 Autograd allows torch to compute exact derivatives of tensor operations with minimal code changes. It's the central feature for making torch useful for training neural network models.
 
@@ -442,6 +444,71 @@ x$grad
 ```
 
 The result is $12$ and that's [because](https://www.wolframalpha.com/input/?i=d%2Fdx+y+%3D+x%5E3) $\frac{\delta y}{\delta x} = 3x ^2$ and we are computing $\frac{\delta y}{\delta x}$ for $x=2$.
+
+### Disabling autograd
+
+It might be useful to disable autograd for a few operations, for example, when you are performing inference on a model.
+
+For that purpose, there are `with` contexts that allow disabling/enabling autograd:
+
+```{r ag2, exercise=TRUE}
+x <- torch_tensor(2, requires_grad = TRUE)
+with_no_grad({
+  y <- x^3  
+})
+# fails: there is no operation tracked by autograd
+y$backward() 
+```
+
+In less common situations you might need to use `with_enable_grad()` to enable autograd inside a `with_no_grad()` expression.
+
+### A slighly more advanced example
+
+Suppose now that we have a function $f(x) = 3x^2 - 2x$ and we want to find it's minimum using gradient descent.
+
+We define this function in R with:
+
+```{r ag3, exercise=TRUE}
+f <- function(x) {
+  3*x ^ 2 - 2*x
+}
+```
+
+Next we are going to use the [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) algorithm to find it's minimum. 
+
+```{r ag4, exercise=TRUE, exercise.setup="ag3"}
+lr <- 0.1 # we define a learning rate
+num_iter <- 20 # number of iterations
+
+x <- torch_randn(1, requires_grad = TRUE) # we start with a random number x
+
+for (i in seq_len(num_iter)) {
+  y <- f(x)
+  y$backward()
+  with_no_grad({
+    x$sub_(lr*x$grad)
+    x$grad$zero_()
+  })
+}
+
+x
+```
+
+If we make a plot of that function we can easily see that this values corresponds to the minimum:
+
+```{r ag5, exercise = TRUE, exercise.setup="ag4"}
+df <- tibble(x = as.numeric(x), y = f(x))
+
+ggplot(df, aes(x = x, y = y)) +
+  geom_point(color = "red", size = 2) +
+  stat_function(fun = f) +
+  xlim(-2, 2) +
+  labs(x = "x", y = "f(x)")
+```
+
+
+
+
 
 
 
