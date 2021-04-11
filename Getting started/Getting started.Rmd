@@ -142,6 +142,19 @@ Feel free to experiment with other initialization function below:
 
 ```
 
+### Converting back to R
+
+Torch provides methods to tensors back to R.
+
+```{r backr, exercise=TRUE}
+# as.array is the most general method and allows
+# converting any type of tensor
+x <- torch_randn(2,2)
+as.array(x)
+```
+
+You can also use `as.matrix`, `as.numeric`, `as.integer` and etc.
+
 ## Tensor attributes {data-progressive=TRUE}
 
 Every tensor has a few attributes that determine how data is stored in the computer. The most important attribute are described below:
@@ -326,6 +339,94 @@ x[1,..,drop=FALSE]
 x[1,1,1] <- 0
 x[1,1,1]
 ```
+
+## Array computation {data-progressive=TRUE}
+
+Torch provides more than 200 functions and methods that operates on tensors. They range from mathematical operations to utilities for reshaping and modifying tensors.
+
+Most operations have both CPU and GPU backends and torch will use the backend corresponding to the tensor device.
+
+See some examples below:
+
+```{r ac1, exercise=TRUE}
+x <- torch_tensor(c(1, 2, 3))
+torch_sub(x, 1)
+```
+
+```{r ac2, exercise=TRUE, exercise.setup="ac1"}
+# many torch_* functions have a corresponding tensor method
+# you can choose the syntax that you like the most
+x$sub(1)
+```
+
+```{r ac3, exercise=TRUE, exercise.setup="ac1"}
+# methods that have an `_` suffix by convention 
+# will operate in-place
+x$sub_(1)
+x
+```
+
+```{r ac4, exercise=TRUE, exercise.setup="ac1"}
+torch_log(torch_exp(x))
+```
+
+You can find the full list of functions in the [documentation website](https://torch.mlverse.org/docs/reference/index.html#section-mathematical-operations-on-tensors).
+
+### Reduction functions
+
+Many functions in torch have a `dim` argument that describes the dimension or dimensions to reduce when doing the specified operation.
+
+For example:
+
+```{r ac5, exercise=TRUE}
+x <- torch_tensor(rbind(c(1,2,3), c(4,5,6)))
+x
+```
+
+```{r ac6, exercise=TRUE, exercise.setup="ac5"}
+# reduces the first dimension. ie. sum all rows for each column
+torch_sum(x, dim = 1)
+```
+
+```{r ac7, exercise=TRUE, exercise.setup="ac5"}
+# reduces the 2nd dimension. ie. sum all columns for each row
+torch_sum(x, dim = 2)
+```
+
+This behavior can be confusing at first because it's semantically different from R `apply`'s.
+
+### Broadcasting
+
+Broadcasting allows us to use tensors of different shapes when executing binary/arithmetic operations. Torch follows the same broadcasting rules as Numpy and we recommend reading [this article](https://numpy.org/doc/stable/user/theory.broadcasting.html#array-broadcasting-in-numpy) for more detailed explanation.
+
+```{r ac8, exercise=TRUE}
+# simplest broadcasting example
+torch_tensor(c(1,2,3)) + 1
+```
+
+The scalar values is broadcasted and added to all elements.
+
+```{r ac9, exercise=TRUE}
+# adding a (3,2) matrix with a (2) vector
+torch_ones(3,2) + torch_tensor(c(1,2))
+```
+
+```{r ac10, exercise=TRUE}
+# broadcasting fails when the last dimension don't match.
+torch_ones(2,3) + torch_tensor(c(1,2))
+```
+
+```{r ac11, exercise=TRUE}
+# A dangerous situation! adding a (10,1) matrix with a 10 vector
+torch_ones(10,1) + torch_tensor(runif(10))
+```
+
+
+
+
+
+
+
 
 
 
