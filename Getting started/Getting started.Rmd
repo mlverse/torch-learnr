@@ -421,8 +421,27 @@ torch_ones(2,3) + torch_tensor(c(1,2))
 torch_ones(10,1) + torch_tensor(runif(10))
 ```
 
+## What's Autograd?
 
+Autograd allows torch to compute exact derivatives of tensor operations with minimal code changes. It's the central feature for making torch useful for training neural network models.
 
+Suppose we have the operation $y = x^3$ and we want to compute the derivative $\frac{\delta y}{\delta x}$ for a point $x=2$.
+
+In torch we can do:
+
+```{r ag1, exercise=TRUE}
+# create `x`. note that **requires_grad** equals TRUE
+x <- torch_tensor(2, requires_grad = TRUE)
+# compute `y` as usual
+y <- x^3
+# call backward(): this populates the `grad` attribute 
+# of tensors that are needed to compute `y` and that require grad.
+y$backward()
+# find the partial derivative dy/dx
+x$grad
+```
+
+The result is $12$ and that's [because](https://www.wolframalpha.com/input/?i=d%2Fdx+y+%3D+x%5E3) $\frac{\delta y}{\delta x} = 3x ^2$ and we are computing $\frac{\delta y}{\delta x}$ for $x=2$.
 
 
 
