@@ -13,9 +13,9 @@ library(learnr)
 library(torch)
 library(ggplot2)
 library(tibble)
-set.seed(1)
-torch_manual_seed(1)
-knitr::opts_chunk$set(echo = FALSE)
+# set.seed(1)
+# torch_manual_seed(1)
+# knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## What is torch?
