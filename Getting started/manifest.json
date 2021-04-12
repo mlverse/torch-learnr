@@ -4,7 +4,7 @@
   "platform": "4.0.3",
   "metadata": {
     "appmode": "rmd-shiny",
-    "primary_rmd": "Getting started.Rmd",
+    "primary_rmd": "getting-started.Rmd",
     "primary_html": null,
     "content_category": null,
     "has_parameters": false
@@ -2245,11 +2245,11 @@
     }
   },
   "files": {
-    "Getting started.Rmd": {
-      "checksum": "04c43d430795cdd1faff8b0a86d65481"
+    "getting-started.html": {
+      "checksum": "00a49c25e392336ee60e19b9eb0a9fc0"
     },
-    "Getting-started.html": {
-      "checksum": "6d027aa1ae57ce94821dfd74abdcccf1"
+    "getting-started.Rmd": {
+      "checksum": "94ee8ce7e31f0afc2eee6d7ec86c50fa"
     },
     "images/.DS_Store": {
       "checksum": "194577a7e20bdcc7afbb718f502c134c"
