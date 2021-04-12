@@ -19,6 +19,9 @@ jobs:
       - uses: actions/checkout@v1
       - uses: r-lib/actions/setup-r@master
       - uses: r-lib/actions/setup-pandoc@master
+      - name: System deps
+        run: |
+          sudo apt-get install -y libcurl4-openssl-dev
       - name: Cache packages
         uses: actions/cache@v1
         with:
@@ -32,19 +35,12 @@ jobs:
         run: |
           if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
           renv::restore()
-          steps:
-          - uses: actions/checkout@v2
-          - name: Build the site in the jekyll/builder container
-            run: |
-              docker run \
-              -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-              jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
-              
+          
       - name: Deploy
         shell: Rscript {0}
         run: |
           install.packages("rsconnect")
           rsconnect::setAccountInfo(name='mlverse', token=Sys.getenv("SHINY_TOKEN"),secret=Sys.getenv("SHINY_SECRET"))
-          rsconnect::deployApp('Getting started/getting-started.Rmd')
+          rsconnect::deployApp('Getting started/', appName = "getting-started-with-torch")
           
           
