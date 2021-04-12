@@ -510,6 +510,88 @@ ggplot(df, aes(x = x, y = y)) +
 ```
 
 
+## Neural network modules {data-progressive=TRUE}
+
+In torch all layers and models are called neural network modules for short `nn_module`s. 
+
+In general we can think of deep learning layers and models as functions that
+operate on tensors. These functions have a special technical detail though: they have a state and their state (ie. the weights and parameters) is mutable (the weights change during training). 
+
+`nn_module`s make it easy to handle state within layers and models and provide convenient way to separate weight initialization from the actual transformations.
+
+### Your first `nn_module`
+
+Let's build a linear model using the `nn_module` abstraction. We use the `nn_module` function in R and we need to pass 2 functions:
+
+* `initialize`: The initialize method is an arbitrary function that is usually
+  used to initialize the parameters of the model. It can take any
+  number of parameters.
+  It has access to the `self` that can be used to share state between
+  methods.
+  
+* `forward`: The forward method describes the transformation that the `nn_module` is going to perform with input data. It can also be a function with an arbitrary number of parameters. It can also use the `self` object to access parameters that were defined in `initialize`.
+
+Internally `nn_modules` are R6 classes, so if you are already familiar with [R6 classes](https://adv-r.hadley.nz/r6.html), all your knowledge can be applied.
+
+In this chunk we define an `nn_module`. Defining an `nn_module` is similar to defining a function in the sense that no actual computation happens at that time. The returned object is what we call a 'factory' of instances of that module.
+
+```{r nn, exercise=TRUE}
+Linear <- nn_module(
+  initialize = function(in_feat, out_feat) {
+    self$w <- nn_parameter(torch_randn(in_feat, out_feat))
+    self$b <- nn_parameter(torch_zeros(out_feat))
+  },
+  forward = function(input) {
+    torch_mm(input, self$w) + self$b
+  }
+)
+```
+
+Once we have defined the `Linear` `nn_module` we can now create an instance of it. When we call the `nn_module` factory object as a function, we are actually calling the `initialize` method that we defined earlier.
+
+The `print` method of the `nn_module` instance shows important information
+like the number of parameters and their structure.
+
+```{r nn2, exercise = TRUE, exercise.setup="nn"}
+linear <- Linear(in_feat = 10, out_feat = 1)
+linear
+```
+
+We now have an instance of the `Linear` module that is called `linear`. We are now able to use this instance to actually perform the linear model computation on a tensor. We we use the instance as an R function, it will actually call the `forward` method that we defined earlier.
+
+```{r nn3, exercise=TRUE, exercise.setup="nn2"}
+x <- torch_randn(3, 10)
+linear(x)
+```
+
+Instances of `nn_modules` also have methods that are useful to inspect the parameters that exist in the modules and other utilities (for example moving all parameters to a different device).
+
+```{r nn4, exercise = TRUE, exercise.setup="nn2"}
+# Lists all parameters in an instance of an `nn_module`
+str(linear$parameters)
+```
+
+```{r nn5, exercise = TRUE, exercise.setup="nn2"}
+# Access individual parameters
+linear$w
+linear$b
+```
+
+```{r nn6, exercise = TRUE, exercise.setup="nn2"}
+# Moves the parameters to a device
+linear$to(device = "cpu")
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
