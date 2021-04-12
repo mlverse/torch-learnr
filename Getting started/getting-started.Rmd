@@ -6,7 +6,7 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 Sys.setenv(TORCH_INSTALL=1)
-Sys.setenv(TORCH_HOME="~/libtorch/")
+Sys.setenv(TORCH_HOME=path.expand("~/libtorch/"))
 torch::install_torch(path = Sys.getenv("TORCH_HOME"))
 
 library(learnr)
