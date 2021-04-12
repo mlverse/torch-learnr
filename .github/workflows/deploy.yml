@@ -1,0 +1,50 @@
+name: Deploy to Shinyapps.io
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv
+      TORCH_INSTALL: 1
+      SHINY_SECRET: ${{ secrets.SHINY_SECRET }}
+      SHINY_TOKEN: {{ secrets.SHINY_TOKEN }}
+
+    steps:
+    
+      - uses: actions/checkout@v1
+      - uses: r-lib/actions/setup-r@master
+      - uses: r-lib/actions/setup-pandoc@master
+      - name: Cache packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-renv-
+
+      - name: Restore packages
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+          steps:
+          - uses: actions/checkout@v2
+          - name: Build the site in the jekyll/builder container
+            run: |
+              docker run \
+              -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
+              jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+              
+      - name: Deploy
+        shell: Rscript {0}
+        run: |
+          install.packages("rsconnect")
+          rsconnect::setAccountInfo(name='mlverse', token=Sys.getenv("SHINY_TOKEN"),secret=Sys.getenv("SHINY_SECRET"))
+          rsconnect::deployApp('Getting started/getting-started.Rmd')
+          
+          
