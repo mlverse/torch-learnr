@@ -13,9 +13,9 @@ library(learnr)
 library(torch)
 library(ggplot2)
 library(tibble)
-# set.seed(1)
-# torch_manual_seed(1)
-# knitr::opts_chunk$set(echo = FALSE)
+set.seed(1)
+torch_manual_seed(1)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## What is torch?
@@ -519,11 +519,57 @@ operate on tensors. These functions have a special technical detail though: they
 
 `nn_module`s make it easy to handle state within layers and models and provide convenient way to separate weight initialization from the actual transformations.
 
-### Your first `nn_module`
+### Implemented `nn_module`s
+
+Torch provides implementations of many of the most common neural network
+layers, like convolutional, recurrent, pooling and activation layers as well as common loss functions.
+
+All implemented neural network modules have an `nn_*` prefix to make it easier to discover.
+
+`nn_module`s are like function factories (we are going to see how exactly they work in the next chapter), but first let's take a look at the `nn_linear` module.
+
+The linear module applies a linear transformation to the input data, ie it does $f(x) = Wx + b$, where $W$ and $b$ are weights/parameters of the module.
+
+First we create an instance of the `nn_linear` module:
+
+```{r nnn1, exercise=TRUE}
+linear <- nn_linear(in_features = 10, out_features = 1)
+linear
+```
+
+The `print` method of the `nn_module` instance shows important information
+like the number of parameters and their structure.
+
+Now we can use it with:
+
+```{r nnn2, exercise=TRUE, exercise.setup="nnn1"}
+x <- torch_randn(3, 10)
+linear(x)
+```
+
+Instances of `nn_modules` also have methods that are useful to inspect the parameters that exist in the modules and other utilities (for example moving all parameters to a different device).
+
+```{r nn4, exercise = TRUE, exercise.setup="nnn1"}
+# Lists all parameters in an instance of an `nn_module`
+str(linear$parameters)
+```
+
+```{r nn5, exercise = TRUE, exercise.setup="nnn1"}
+# Access individual parameters
+linear$w
+linear$b
+```
+
+```{r nn6, exercise = TRUE, exercise.setup="nnn1"}
+# Moves the parameters to the specified device
+linear$to(device = "cpu")
+```
+
+### Custom `nn_modules`
 
 Let's build a linear model using the `nn_module` abstraction. We use the `nn_module` function in R and we need to pass 2 functions:
 
-* `initialize`: The initialize method is an arbitrary function that is usually
+* `initialize`: The initialize method is an arbitrary function that is     usually
   used to initialize the parameters of the model. It can take any
   number of parameters.
   It has access to the `self` that can be used to share state between
@@ -549,9 +595,6 @@ Linear <- nn_module(
 
 Once we have defined the `Linear` `nn_module` we can now create an instance of it. When we call the `nn_module` factory object as a function, we are actually calling the `initialize` method that we defined earlier.
 
-The `print` method of the `nn_module` instance shows important information
-like the number of parameters and their structure.
-
 ```{r nn2, exercise = TRUE, exercise.setup="nn"}
 linear <- Linear(in_feat = 10, out_feat = 1)
 linear
@@ -564,23 +607,45 @@ x <- torch_randn(3, 10)
 linear(x)
 ```
 
-Instances of `nn_modules` also have methods that are useful to inspect the parameters that exist in the modules and other utilities (for example moving all parameters to a different device).
+### Combining multiple modules
 
-```{r nn4, exercise = TRUE, exercise.setup="nn2"}
-# Lists all parameters in an instance of an `nn_module`
-str(linear$parameters)
+`nn_modules` can also include sub-modules and this is what allows us to write modules using the same abstraction that we use to write layers.
+
+For example let's build a multi-layer perceptron module with a ReLu activation.
+
+```{r nn4, exercise=TRUE}
+nn_mlp <- nn_module(
+  initialize = function(in_feat, hidden_feat, out_feat) {
+    self$fc1 <- nn_linear(in_feat, hidden_feat)
+    self$relu <- nn_relu()
+    self$fc2 <- nn_linear(hidden_feat, out_feat)
+  },
+  forward = function(input) {
+    input %>% 
+      self$fc1() %>% 
+      self$relu() %>% 
+      self$fc2()
+  }
+)
+mlp <- nn_mlp(10, 5, 1)
+mlp
 ```
 
-```{r nn5, exercise = TRUE, exercise.setup="nn2"}
-# Access individual parameters
-linear$w
-linear$b
+Calling the model with an example input tensor works as expected too:
+
+```{r nn5, exercise=TRUE, exercise.setup="nn4"}
+x <- torch_randn(3, 10)
+mlp(x)
 ```
 
-```{r nn6, exercise = TRUE, exercise.setup="nn2"}
-# Moves the parameters to a device
-linear$to(device = "cpu")
+You can see that now the print method is showing the number of parameters of the model including all sub-modules. The parameters attribute also lists all parameters, including those of the sub-modules:
+
+```{r nn6, exercise=TRUE, exercise.setup="nn4"}
+mlp$parameters
 ```
+
+
+
 
 
 
