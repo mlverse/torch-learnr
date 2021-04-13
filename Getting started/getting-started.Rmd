@@ -644,7 +644,20 @@ You can see that now the print method is showing the number of parameters of the
 mlp$parameters
 ```
 
+### Sequential modules
 
+When the `forward` method in the `nn_module` just calls the submodules in a sequence like in the `mlp` example, you can use the `nn_sequential` container to skip writing the `forward` method:
+
+```{r, exercise = TRUE}
+mlp <- nn_sequential(
+  nn_linear(10, 5),
+  nn_relu(),
+  nn_linear(5, 1)
+)
+mlp
+```
+
+The `mlp` module defined here is equivalent to the one we wrote in the previous chapter.
 
 
 
