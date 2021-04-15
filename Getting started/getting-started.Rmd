@@ -497,6 +497,8 @@ usually by setting them to zero. This must also happen in place, by using for
 example `x$grad$zero_()`. By default torch accumulates gradients after backward,
 and in general we don't want to start fresh the `grad` after the weight update.
 
+The torch `optim_` functions will help us not having remember all the details.
+
 :::
 
 ```{r ag4, exercise=TRUE, exercise.setup="ag3"}
@@ -528,6 +530,71 @@ ggplot(df, aes(x = x, y = y)) +
   xlim(-2, 2) +
   labs(x = "x", y = "f(x)")
 ```
+
+
+## Optimizers
+
+Torch optimizers are torch's abstraction to encapsulate weights updating logic.
+There are a few readily available optimizers, like *Adam*, *Adagrad* and *SGD*, but
+it's also possible to create custom optimizers.
+
+First, let's come back to the example we used in the autograd chapter.
+In this example we manually updated the weights using the simmples
+for of the gradient descent algorithm. 
+
+The logic for updating the weights is wraped in the `with_no_grad` block.
+
+```{r opt1, exercise=TRUE, exercise.setup="ag3"}
+lr <- 0.1 # we define a learning rate
+num_iter <- 20 # number of iterations
+
+x <- torch_randn(1, requires_grad = TRUE) # we start with a random number x
+
+for (i in seq_len(num_iter)) {
+  y <- f(x)
+  y$backward()
+  
+  # ---- -> updating the weights
+  with_no_grad({
+    x$sub_(lr*x$grad)
+    x$grad$zero_()
+  })
+  # ---- <- updating the weights
+}
+
+x
+```
+
+Let's now rewrite this piece of code using the packaged torch optimizers.
+
+```{r opt2, exercise=TRUE, exercise.setup="ag3"}
+lr <- 0.1 # we define a learning rate
+num_iter <- 20 # number of iterations
+
+x <- torch_randn(1, requires_grad = TRUE) # we start with a random number x
+
+# we create the optimizer here and the first argument is a list
+# of weights that we want to optimize. It also takes a learning rate (`lr`) 
+# argument.
+opt <- optim_sgd(x, lr = lr)
+
+for (i in seq_len(num_iter)) {
+  opt$zero_grad() # refreshs the `grad` attribute of all parameters
+  y <- f(x)
+  y$backward()
+  opt$step() # performs one update step for all parameters 
+}
+
+x
+```
+
+Note that we no longer need to wrap our calls in `with_no_grad`, nor manually
+perform the update step with an in-place operation. The optimizer takes care
+of all of these implementation details, so you don't need to if you are using
+common optimization algorithms.
+
+This also allows you to easily switch optimizers. As an exercise, try using the
+Adam optimizer in the above chunk.
 
 
 ## Neural network modules {data-progressive=TRUE}
@@ -687,16 +754,6 @@ Sometimes the functional API is more convenient, specially if the module counter
 parameters, because it allows you to avoid initializing the module.
 
 Be careful with `nnf_*` functions when you want to have different behaviors between training and validation modes, for example `nnf_dropout()`. In those cases it's better to use the `nn_*` module counterpart.
-
-## Optimizers
-
-
-
-
-
-
-
-
 
 
 
