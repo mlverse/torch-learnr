@@ -659,6 +659,18 @@ mlp
 
 The `mlp` module defined here is equivalent to the one we wrote in the previous chapter.
 
+### Functional API
+
+Most `nn_*` modules have a `nnf_*` counterpart. These functions, for example `nnf_relu()` and `nn_relu()`.
+
+Sometimes the functional API is more convenient, specially if the module counterpart does not include
+parameters, because it allows you to avoid initializing the module.
+
+Be careful with `nnf_*` functions when you want to have different behaviors between training and validation modes, for example `nnf_dropout()`. In those cases it's better to use the `nn_*` module counterpart.
+
+
+
+
 
 
 
