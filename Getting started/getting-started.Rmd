@@ -479,6 +479,26 @@ f <- function(x) {
 
 Next we are going to use the [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) algorithm to find it's minimum. 
 
+::: {.alert .alert-warning}
+
+There are 3 **very important** details when updating the weights:
+
+---
+
+1. We must disable autograd (using `with_no_grad`) when updating weights, because 
+we don't want torch to track the subtraction for future backpropagate the update
+operation.
+
+2. The update operation must happen **in-place** on the weight tensor, otherwise
+this tensor is no longer a leaf tensor and torch can no longer backpropagate for it.
+
+3. We must manually erase the gradients that we just used to update the tensors,
+usually by setting them to zero. This must also happen in place, by using for
+example `x$grad$zero_()`. By default torch accumulates gradients after backward,
+and in general we don't want to start fresh the `grad` after the weight update.
+
+:::
+
 ```{r ag4, exercise=TRUE, exercise.setup="ag3"}
 lr <- 0.1 # we define a learning rate
 num_iter <- 20 # number of iterations
@@ -613,7 +633,7 @@ linear(x)
 
 For example let's build a multi-layer perceptron module with a ReLu activation.
 
-```{r nn4, exercise=TRUE}
+```{r nn4z, exercise=TRUE}
 nn_mlp <- nn_module(
   initialize = function(in_feat, hidden_feat, out_feat) {
     self$fc1 <- nn_linear(in_feat, hidden_feat)
@@ -633,14 +653,14 @@ mlp
 
 Calling the model with an example input tensor works as expected too:
 
-```{r nn5, exercise=TRUE, exercise.setup="nn4"}
+```{r nn5s, exercise=TRUE, exercise.setup="nn4z"}
 x <- torch_randn(3, 10)
 mlp(x)
 ```
 
 You can see that now the print method is showing the number of parameters of the model including all sub-modules. The parameters attribute also lists all parameters, including those of the sub-modules:
 
-```{r nn6, exercise=TRUE, exercise.setup="nn4"}
+```{r nn6s, exercise=TRUE, exercise.setup="nn4z"}
 mlp$parameters
 ```
 
@@ -648,7 +668,7 @@ mlp$parameters
 
 When the `forward` method in the `nn_module` just calls the submodules in a sequence like in the `mlp` example, you can use the `nn_sequential` container to skip writing the `forward` method:
 
-```{r, exercise = TRUE}
+```{r nns, exercise = TRUE}
 mlp <- nn_sequential(
   nn_linear(10, 5),
   nn_relu(),
@@ -667,6 +687,10 @@ Sometimes the functional API is more convenient, specially if the module counter
 parameters, because it allows you to avoid initializing the module.
 
 Be careful with `nnf_*` functions when you want to have different behaviors between training and validation modes, for example `nnf_dropout()`. In those cases it's better to use the `nn_*` module counterpart.
+
+## Optimizers
+
+
 
 
 
