@@ -643,8 +643,8 @@ str(linear$parameters)
 
 ```{r nn5, exercise = TRUE, exercise.setup="nnn1"}
 # Access individual parameters
-linear$w
-linear$b
+linear$weight
+linear$bias
 ```
 
 ```{r nn6, exercise = TRUE, exercise.setup="nnn1"}
