@@ -591,11 +591,11 @@ x
 Note that we no longer need to wrap our calls in `with_no_grad`, nor manually
 perform the update step with an in-place operation. The optimizer takes care
 of all of these implementation details, so you don't need to if you are using
-common optimization algorithms.
+common optimization algorithms. We still need to compute the loss and use the 
+`$backward()` method to populate the `grad` attribute of the each parameter.
 
 This also allows you to easily switch optimizers. As an exercise, try using the
 Adam optimizer in the above chunk.
-
 
 ## Neural network modules {data-progressive=TRUE}
 
@@ -755,22 +755,65 @@ parameters, because it allows you to avoid initializing the module.
 
 Be careful with `nnf_*` functions when you want to have different behaviors between training and validation modes, for example `nnf_dropout()`. In those cases it's better to use the `nn_*` module counterpart.
 
+### Example: training a linear model
 
+Let's use everything we learned until now to train a linear model to simulated data.
+First, let's simulate a data set. We will generate a matrix with 100 observations
+of 3 variables, all randomly generated from the standard normal distribution. 
+The response tensor will be generated sing the equation: $y = 0.5 + 2*x_1 -3*x_2 + x_3 + noise$
+We also add a small amount of noise sample from $N(0, 0.1)$.
 
+```{r lm, exercise = TRUE}
+x <- torch_randn(100, 3)
+y <- 0.5 + 2*x[,1] - 3*x[,2] + x[,3] + torch_randn(100)/10
+y <- y[,newaxis] # we want y dimensions to be 100x1
+```
 
+We now define our model and optimizer:
 
+```{r, lm2, exercise=TRUE, exercise.setup="lm"}
+model <- nn_linear(in_features = 3, out_features = 1)
+model
+```
 
+```{r lm3, exercise=TRUE, exercise.setup="lm2"}
+opt <- optim_sgd(model$parameters, lr = 0.1)
+```
 
+Finally we write our training loop:
 
+```{r, lm4, exercise=TRUE, exercise.setup="lm3"}
+for (iter in 1:10) {
+  opt$zero_grad()
+  pred <- model(x)
+  loss <- nnf_mse_loss(y, pred)
+  loss$backward()
+  opt$step()
+  cat("Loss at step ", iter, ": ", loss$item(), "\n")
+}
+```
 
+We can finally see the final parameter values. Compare them to the theoretical 
+values and they should be similar to the values we used to simulate our data.
 
+```{r lm5, exercise = TRUE, exercise.setup="lm4"}
+model$weight
+model$bias
+```
 
+Finally, we can use the `torch_save` function to save our final model to a file
+on disk.
 
+::: {.alert .alert-warning}
+**Note** that `saveRDS` doesn't work correctly for torch models.
+:::
 
+```{r lm6, exercise = TRUE, exercise.setup="lm5"}
+torch_save(model, "model.pt")
+```
 
+To reload the model, use the `torch_load` function.
 
+##### Exercise: 
 
-
-
-
-
+Modify the above code chunks to fit a Multi layer perceptron instead of a linear model.
