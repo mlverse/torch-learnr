@@ -822,4 +822,58 @@ To reload the model, use the `torch_load` function.
 
 Modify the above code chunks to fit a Multi layer perceptron instead of a linear model.
 
+## Datasets {data-progressive=TRUE}
+
+`torch_dataset` is the object representing data in Torch.
+A new `torch_dataset` can be created using the `dataset` function, which requires the following 3 functions as arguments:
+
+- `initialize`: this function takes inputs for your dataset initialization. It can have an arbitrary number of arguments.
+- `.getitem`: this function takes a single integer index as input and returns an observation of the dataset.
+- `.length`: this function takes no arguments and returns the total number of observations in the dataset.
+
+Let's see an example below:
+
+```{r dataset, exercise=TRUE, exercise.lines=20}
+mydataset <- dataset(
+  # The initialize function takes the number of rows 
+  # and columns and initializes 2 tensors (x, y) sampled
+  # from the standard normal distribution.
+  initialize = function(n_rows, n_cols) {
+    self$x <- torch_randn(n_rows, n_cols)
+    self$y <- torch_randn(n_rows)
+  },
+  # We subset the previously initialized `x` and `y`
+  # using the index provided as argument.
+  .getitem = function(index) {
+    list(self$x[index,], self$y[index])
+  },
+  # We find the number fo rows by looking at the shape
+  # of the initialized tensor `x`.
+  .length = function() {
+    self$x$shape[1]
+  }
+)
+```
+
+The `dataset` function creates a definition of how to initialize and get elements from a dataset and compute it's lenght. We can now initialize a new dataset and start extracting elements from it:
+
+```{r dataset2, exercise=TRUE, exercise.setup="dataset"}
+# This calls the `initialize` function that we defined earlier
+# with the provided parameters.
+ds <- mydataset(n_rows = 100, n_cols = 5)
+```
+
+```{r dataset3, exercise=TRUE, exercise.setup="dataset2"}
+# This computes the `length` of the dataset using the .length
+# function we defined earlier
+length(ds)
+```
+
+```{r dataset4, exercise=TRUE, exercise.setup="dataset2"}
+# This extracts the first observation of the dataset.
+ds[1]
+```
+
+
+
 
