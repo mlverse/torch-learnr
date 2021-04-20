@@ -9,9 +9,9 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
+
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("~/libtorch/"))
-torch::install_torch(path = Sys.getenv("TORCH_HOME"))
 
 library(learnr)
 library(torch)
@@ -20,6 +20,7 @@ library(tibble)
 set.seed(1)
 torch_manual_seed(1)
 knitr::opts_chunk$set(echo = FALSE)
+
 ```
 
 ## What is torch?
