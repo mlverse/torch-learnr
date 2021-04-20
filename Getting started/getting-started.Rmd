@@ -1,6 +1,10 @@
 ---
 title: "Getting started with torch"
-output: learnr::tutorial
+tutorial:
+  version: 0.0.1
+output: 
+  learnr::tutorial:
+    allow_skip: true
 runtime: shiny_prerendered
 ---
 
@@ -817,3 +821,5 @@ To reload the model, use the `torch_load` function.
 ##### Exercise: 
 
 Modify the above code chunks to fit a Multi layer perceptron instead of a linear model.
+
+
