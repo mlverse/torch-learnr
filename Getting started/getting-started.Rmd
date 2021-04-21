@@ -875,6 +875,21 @@ length(ds)
 ds[1]
 ```
 
+### Common patterns
+
+The `dataset()` function allows us to define data loading and pre-processing in a very flexible way. 
+
+In this topic we will walk trough a simplified implementation of the `image_folder_dataset()`
+provided in the TorchVision package.
+
+This exercise will allow us to understand the common patterns when building datasets in torch.
+
+```{r}
+
+```
+
+
+
 
 
 
