@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 *.html
+libtorch/*
+data-raw/*
+Getting started/libtorch/*
+Getting started/data-raw/*

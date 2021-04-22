@@ -11,10 +11,11 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 
 Sys.setenv(TORCH_INSTALL=1)
-Sys.setenv(TORCH_HOME=path.expand("~/libtorch/"))
+Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
 
 library(learnr)
 library(torch)
+library(torchvision)
 library(ggplot2)
 library(tibble)
 set.seed(1)
@@ -825,7 +826,28 @@ Modify the above code chunks to fit a Multi layer perceptron instead of a linear
 
 ## Datasets {data-progressive=TRUE}
 
-`torch_dataset` is the object representing data in Torch.
+`torch_dataset` is the object representing data in Torch. There are a few datasets that are already implemented in packages from the torch ecossystem and you can also implement your own.
+
+Let's first take a look at the MNIST dataset available in the TorchVision package. The MNIST dataset consists of images of handwritten digits from 0 to 9.
+
+We can create the dataset using the `mnist_dataset()` function. When we first run this function the dataset will be downloaded and cached in the path specified by the `root` argument.
+
+```{r}
+mnist <- mnist_dataset(root = "data-raw/mnist", download = TRUE)
+length(mnist)
+```
+
+The `length` function reports the number of observations in the dataset.
+We can also subset the dataset with:
+
+```{r}
+str(mnist[1])
+```
+
+This returns the first observation in the dataset, which is a pair: image 28x28 and it's label.
+
+### Custom datasets
+
 A new `torch_dataset` can be created using the `dataset` function, which requires the following 3 functions as arguments:
 
 - `initialize`: this function takes inputs for your dataset initialization. It can have an arbitrary number of arguments.
@@ -871,7 +893,8 @@ length(ds)
 ```
 
 ```{r dataset4, exercise=TRUE, exercise.setup="dataset2"}
-# This extracts the first observation of the dataset.
+# This extracts the first observation of the dataset. It's
+# equivalent to calling ds$.getitem(1)
 ds[1]
 ```
 
@@ -884,6 +907,18 @@ The `dataset()` function allows us to define data loading and pre-processing in 
 - Sometimes the full dataset doesn't fit completely on RAM. It's common for the `initialize` method to only define what are the observations (eg. define all paths to images stored on disk) and then we use the `.getitem` method to read that image from disk. This pattern is implemented in the `folder_dataset()` available in the TorchVision package, you can see it [here](https://github.com/mlverse/torchvision/blob/37aa523ee0a3846535d735099cfab45af5336472/R/folder-dataset.R#L89-L103).
 
 - It's common that datasets provides a `transform` argument in the `initialize` method that are applied as last step in the `.getitem`. This allows for the dataset user to specify additional pre-processing or data augmentation techniques that are specific to the task that it's used.
+
+## Dataloaders
+
+Dataloaders are torch's abstraction used to iterate over datasets in batches and optionally shuffling and preparing data in parallel.
+
+A Dataloader is created by passing a dataset to the `dataloader()` function.
+Let's take for example the MNIST dataset implemented in the TorchVision package:
+
+```{r}
+mnist <- mnist_dataset(root = "data-raw/mnist")
+```
+
 
 
 

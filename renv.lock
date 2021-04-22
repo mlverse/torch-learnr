@@ -51,6 +51,13 @@
       "Repository": "CRAN",
       "Hash": "dbb5e436998a7eba5a9d682060533338"
     },
+    "abind": {
+      "Package": "abind",
+      "Version": "1.4-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4f57884290cc75ab22f4af9e9d4ca862"
+    },
     "backports": {
       "Package": "backports",
       "Version": "1.1.10",
@@ -81,10 +88,10 @@
     },
     "callr": {
       "Package": "callr",
-      "Version": "3.6.0",
+      "Version": "3.7.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "25da2c6fba6a13b5da94e37acdb3f532"
+      "Hash": "461aa75a11ce2400245190ef5d3995df"
     },
     "checkmate": {
       "Package": "checkmate",
@@ -182,6 +189,13 @@
       "Repository": "CRAN",
       "Hash": "83ab58a0518afe3d17e41da01af13b60"
     },
+    "fs": {
+      "Package": "fs",
+      "Version": "1.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "44594a07a42e5f91fac9f93fda6d0109"
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.3.3",
@@ -242,6 +256,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "b2008df40fb297e3fef135c7e8eeec1a"
+    },
+    "jpeg": {
+      "Package": "jpeg",
+      "Version": "0.1-8.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bc316c003aba520fc73d70ad53b5fc36"
     },
     "jsonlite": {
       "Package": "jsonlite",
@@ -359,6 +380,13 @@
       "Repository": "CRAN",
       "Hash": "01f28d4278f15c76cddbea05899c5d6f"
     },
+    "png": {
+      "Package": "png",
+      "Version": "0.1-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "03b7076c234cb3331288919983326c55"
+    },
     "processx": {
       "Package": "processx",
       "Version": "3.5.1",
@@ -472,10 +500,28 @@
     },
     "torch": {
       "Package": "torch",
-      "Version": "0.2.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8645b85e28a86a8cc71615cd5557b65b"
+      "Version": "0.2.1.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "torch",
+      "RemoteUsername": "mlverse",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "88700be25bc0b1d7747d3a950570595922d11fef",
+      "Hash": "bbc1b40a5766d0d1662752c10f0881a1"
+    },
+    "torchvision": {
+      "Package": "torchvision",
+      "Version": "0.2.0.9000",
+      "Source": "GitHub",
+      "Remotes": "mlverse/torch",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "torchvision",
+      "RemoteUsername": "mlverse",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "37aa523ee0a3846535d735099cfab45af5336472",
+      "Hash": "932fa4507db4cc70938ead8ce82a774e"
     },
     "utf8": {
       "Package": "utf8",
@@ -500,10 +546,10 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "2.4.1",
+      "Version": "2.4.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "caf4781c674ffa549a4676d2d77b13cc"
+      "Hash": "ad03909b44677f930fa156d47d7a3aeb"
     },
     "xfun": {
       "Package": "xfun",
