@@ -877,16 +877,16 @@ ds[1]
 
 ### Common patterns
 
-The `dataset()` function allows us to define data loading and pre-processing in a very flexible way. 
+The `dataset()` function allows us to define data loading and pre-processing in a very flexible way. We can decide how to implement the `dataset` the way it works better for our problem, but in this topic we will list a few common patterns used when creating datasets in torch.
 
-In this topic we will walk trough a simplified implementation of the `image_folder_dataset()`
-provided in the TorchVision package.
+- The `initialize` method can be used to download, cache and do some pre-processing on the data. You can see an example in the `mnist_dataset()` [implementation provided](https://github.com/mlverse/torchvision/blob/37aa523ee0a3846535d735099cfab45af5336472/R/dataset-mnist.R#L31-L54) in the TorchVision package. In the `mnist_dataset()` we download the dataset that is stored in a cloud bucket and pre-process it to convert from the pascal_vincent format to an `.rds` file that is later pre-loaded.
 
-This exercise will allow us to understand the common patterns when building datasets in torch.
+- Sometimes the full dataset doesn't fit completely on RAM. It's common for the `initialize` method to only define what are the observations (eg. define all paths to images stored on disk) and then we use the `.getitem` method to read that image from disk. This pattern is implemented in the `folder_dataset()` available in the TorchVision package, you can see it [here](https://github.com/mlverse/torchvision/blob/37aa523ee0a3846535d735099cfab45af5336472/R/folder-dataset.R#L89-L103).
 
-```{r}
+- It's common that datasets provides a `transform` argument in the `initialize` method that are applied as last step in the `.getitem`. This allows for the dataset user to specify additional pre-processing or data augmentation techniques that are specific to the task that it's used.
 
-```
+
+
 
 
 
