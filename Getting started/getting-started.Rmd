@@ -9,7 +9,6 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
 
@@ -915,11 +914,105 @@ Dataloaders are torch's abstraction used to iterate over datasets in batches and
 A Dataloader is created by passing a dataset to the `dataloader()` function.
 Let's take for example the MNIST dataset implemented in the TorchVision package:
 
-```{r}
-mnist <- mnist_dataset(root = "data-raw/mnist")
+```{r dl1, exercise = TRUE}
+# taking the validation dataset
+mnist <- mnist_dataset(root = "data-raw/mnist", download = TRUE, train = FALSE)
+dl <- dataloader(mnist, batch_size = 32, shuffle = TRUE)
+length(dl)
 ```
 
+`lenght()` returns the number of batches that are possible to extract from a
+dataloader.
 
+Indeed, if we take the size of the MNIST validation dataset (10k obs) and 
+divide by the batch size (32) we see that we can take 313 batches.
+
+```{r dl2, exercise = TRUE, exercise.setup="dl1"}
+length(mnist) / 32
+```
+
+Dataloaders can be iterated using the `coro::loop()` function combined with
+a `for` loop. The reason we need `coro::loop()` is that batches in `dataloaders`
+are only computed when they are actually used, to avoid large memory usage.
+
+```{r dl22, exercise = TRUE, exercise.setup="dl2"}
+total <- 0
+coro::loop(for (batch in dl) {
+  total <- total + batch$x$shape[1]
+})
+total
+```
+
+You can see `dataloaders` as an object similar to an R list with the important difference
+that the elements are not actually computed yet, and they get computed every time you
+loop trough it.
+
+### Parallel data loading
+
+Suppose that you need to do a time consuming computation every time you load an observation (eg. reading an image from the disk, resize and normalize it). 
+
+A good way to speed this up is using a parallel
+dataloader that is able to load multiple batches at the same time so by the time 
+you used the first batch in your model, another batch will be already computed.
+
+Dataloaders provides a `num_workers` argument used to specify the number of parallel
+R sessions that are going to be used to load your data.
+
+Let's now write a small example, but first let's create a dummy dataset that simulates
+a long computation.
+
+```{r dl3, exercise = TRUE}
+dummy_dataset <- dataset(
+  initialize = function(time, n) {
+    self$time <- time
+    self$n <- n
+  },
+  .getitem = function(i) {
+    Sys.sleep(self$time)
+    list(x = torch_randn(28, 28), y = torch_randn(1))
+  },
+  .length = function() {
+    self$n
+  }
+)
+
+ds <- dummy_dataset(time = 0.1, n = 100)
+system.time({
+  ds[1]
+})
+```
+
+Taking an observation of this dataset takes around `time = 0.01` seconds.
+Now let's use a serial dataloader to take 10 batches of size 10 of this dataset.
+
+```{r dl4, exercise = TRUE, exercise.setup="dl3"}
+dl <- dataloader(ds, batch_size = 10)
+system.time({
+  coro::loop(for(b in dl) {
+    a <- b
+  })
+})
+```
+
+This takes around 10s as it's 10 (batches) x (10 obs per batch) * (0.1s per obs) + a small overhead.
+Now let's use a parallel dataloader by passing the `num_workers=2` argument.
+This will initialize `num_workers` R sessions, copy the dataset to each of them and 
+start loading batches in parallel.
+
+```{r dl5, exercise = TRUE, exercise.setup="dl3"}
+dl <- dataloader(ds, batch_size = 10, num_workers = 2)
+system.time({
+  coro::loop(for(b in dl) {
+    a <- b
+  })
+})
+```
+
+This should take a few seconds less. Like most parallel computation problems there's a
+small overhead for starting new sessions copying data between process, meaning 
+that it's not necessarily faster for problems when `.getitem` runs too fast, or you
+only have just a few batches - when the time for initializing the sessions don't
+compensate the runtime speedup you get for each obs.
 
 
 
