@@ -5,6 +5,14 @@ tutorial:
 output: 
   learnr::tutorial:
     allow_skip: true
+    theme:
+      version: 3
+      heading_font:
+        google: "Fira Sans"
+      base_font: 
+        google: "Fira Sans"
+      code_font:
+        google: "Fira Code"
 runtime: shiny_prerendered
 ---
 
