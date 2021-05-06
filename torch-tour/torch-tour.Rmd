@@ -17,18 +17,24 @@ runtime: shiny_prerendered
 ```{r, include=FALSE}
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
+
+if (!torch::torch_is_installed() || length(list.files("libtorch/")) == 0)
+  torch::install_torch()
 ```
 
 ```{r, context="server", include=FALSE}
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
+
+if (!torch::torch_is_installed() || length(list.files("libtorch/")) == 0)
+  torch::install_torch()
 ```
 
 ```{r setup, include=FALSE}
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
 
-if (!torch::torch_is_installed())
+if (!torch::torch_is_installed() || length(list.files("libtorch/")) == 0)
   torch::install_torch()
 
 library(learnr)
