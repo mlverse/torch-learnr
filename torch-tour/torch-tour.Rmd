@@ -14,7 +14,7 @@ output:
 runtime: shiny_prerendered
 ---
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
 
