@@ -8,11 +8,8 @@ output:
     theme:
       version: 3
       heading_font:
-        google: "Fira Sans"
-      base_font: 
-        google: "Fira Sans"
-      code_font:
         google: "Fira Code"
+      font_scale: 4
 runtime: shiny_prerendered
 ---
 
