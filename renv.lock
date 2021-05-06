@@ -528,15 +528,10 @@
     },
     "torch": {
       "Package": "torch",
-      "Version": "0.2.1.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "torch",
-      "RemoteUsername": "mlverse",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "88700be25bc0b1d7747d3a950570595922d11fef",
-      "Hash": "bbc1b40a5766d0d1662752c10f0881a1"
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1cc5b49dfc8423c3df70ddd5f9852d34"
     },
     "torchvision": {
       "Package": "torchvision",
