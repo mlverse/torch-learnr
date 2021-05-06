@@ -5,3 +5,11 @@
   font-size: 16px;
   font-family: "Fira Sans";
 }
+
+h2.tutorialTitle {
+  font-size: 72px;
+  text-align: center;
+  background: -webkit-linear-gradient(#E32D5B, #812CE5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
