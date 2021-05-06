@@ -1,0 +1,7 @@
+/* Get a fancy font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
+
+.topics p,li {
+  font-size: 16px;
+  font-family: "Fira Sans";
+}

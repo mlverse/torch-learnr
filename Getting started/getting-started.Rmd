@@ -1,5 +1,5 @@
 ---
-title: "Getting started with torch"
+title: "A tour of Torch"
 tutorial:
   version: 0.0.1
 output: 
@@ -9,7 +9,8 @@ output:
       version: 3
       heading_font:
         google: "Fira Code"
-      font_scale: 4
+      font_scale: 1
+    css: css/style.css
 runtime: shiny_prerendered
 ---
 
@@ -54,9 +55,9 @@ knitr::opts_chunk$set(echo = FALSE)
 :::
 :::
 
-## How it's implemented?
+### How it's implemented?
 
-Before going into code it's nice to understand the basic of how torch is implemented in R.
+Before going into code it's nice to understand the basics of how torch is implemented in R.
 
 ::: {.row}
 ::: {.col-md-6}
@@ -75,6 +76,20 @@ Before going into code it's nice to understand the basic of how torch is impleme
 ![Implementation diagram.](images/implementation.png){width="100%"}
 :::
 :::
+
+### Installation
+
+The Torch R package is avaliable on CRAN and can be installed with:
+
+```
+install.packages("torch")
+```
+
+When the package is first loaded with `library(torch)`, additional libraries will
+be downloaded and installed to complete the installation.
+
+See our [installation guide](https://torch.mlverse.org/docs/articles/installation.html) 
+for more information.
 
 ## Torch components
 
@@ -172,7 +187,7 @@ You can also use `as.matrix`, `as.numeric`, `as.integer` and etc.
 
 ## Tensor attributes {data-progressive=TRUE}
 
-Every tensor has a few attributes that determine how data is stored in the computer. The most important attribute are described below:
+Every tensor has a few attributes that determine how data is stored in the computer. The most important attributes are described below:
 
 <!-- <div class = "row"> -->
 <!-- <div class="col-md-6"></div> -->
@@ -231,8 +246,8 @@ The `$to` method creates a copy of that tensor with modified attributes.
 
 ### CUDA devices
 
-Moving between devices is also done with the `$to` method, but devices only `cpu` devices are available to all systems. CUDA devices are only available if your system is equipped with a compatible GPU.
-You can check if they are available with:
+Moving between devices is also done with the `$to` method, but only `cpu` devices are available to all systems. CUDA devices are only available if your system is equipped with a compatible GPU.
+You can check if a CUDA device is available with:
 
 ```{r cuda, exercise=TRUE}
 cuda_is_available()
@@ -408,7 +423,7 @@ torch_sum(x, dim = 1)
 torch_sum(x, dim = 2)
 ```
 
-This behavior can be confusing at first because it's semantically different from R `apply`'s.
+This behavior can be confusing at first because it's semantically different from R `apply`'s, that can be interpreted as a 'group by' operation instead.
 
 ### Broadcasting
 
@@ -496,11 +511,11 @@ There are 3 **very important** details when updating the weights:
 ---
 
 1. We must disable autograd (using `with_no_grad`) when updating weights, because 
-we don't want torch to track the subtraction for future backpropagate the update
-operation.
+we don't want autograd to track the weight updating operation as we don't want
+to backpropagate this operation later.
 
 2. The update operation must happen **in-place** on the weight tensor, otherwise
-this tensor is no longer a leaf tensor and torch can no longer backpropagate for it.
+this tensor is no longer a leaf tensor and torch can no longer backpropagate gradients for it.
 
 3. We must manually erase the gradients that we just used to update the tensors,
 usually by setting them to zero. This must also happen in place, by using for
@@ -623,11 +638,11 @@ layers, like convolutional, recurrent, pooling and activation layers as well as 
 
 All implemented neural network modules have an `nn_*` prefix to make it easier to discover.
 
-`nn_module`s are like function factories (we are going to see how exactly they work in the next chapter), but first let's take a look at the `nn_linear` module.
+`nn_module`s are like function factories (we are going to implement a `nn_module` from scratch in the next chapter), but first let's take a look at the built-in `nn_linear` module.
 
 The linear module applies a linear transformation to the input data, ie it does $f(x) = Wx + b$, where $W$ and $b$ are weights/parameters of the module.
 
-First we create an instance of the `nn_linear` module:
+First we create an instance of the `nn_linear` module. We pass the parameters `in_features` and `out_features` that are objectively defining the shape of the $W$ matrix in the linear transformation.
 
 ```{r nnn1, exercise=TRUE}
 linear <- nn_linear(in_features = 10, out_features = 1)
@@ -662,15 +677,19 @@ linear$bias
 linear$to(device = "cpu")
 ```
 
+Torch has many built-in `nn_modules` that commonly used. For example:
+
+- `nn_conv2d`: Applies a 2D convolution over an input signal composed of several input planes.
+- `nn_lstm`: Applies a multi-layer long short-term memory (LSTM) RNN to an input sequence.
+- `nn_max_pool2d`: Applies a 2D max pooling over an input signal composed of several input planes.
+
+You can find the full list in the reference documentation available [here](https://torch.mlverse.org/docs/reference/index.html#section-neural-network-modules)
+
 ### Custom `nn_modules`
 
 Let's build a linear model using the `nn_module` abstraction. We use the `nn_module` function in R and we need to pass 2 functions:
 
-* `initialize`: The initialize method is an arbitrary function that is     usually
-  used to initialize the parameters of the model. It can take any
-  number of parameters.
-  It has access to the `self` that can be used to share state between
-  methods.
+* `initialize`: The initialize method is an arbitrary function that is mostly used to initialize the parameters of the model. It can take any number of parameters. It has access to the `self` that can be used to share state between methods.
   
 * `forward`: The forward method describes the transformation that the `nn_module` is going to perform with input data. It can also be a function with an arbitrary number of parameters. It can also use the `self` object to access parameters that were defined in `initialize`.
 
@@ -690,18 +709,18 @@ Linear <- nn_module(
 )
 ```
 
-Once we have defined the `Linear` `nn_module` we can now create an instance of it. When we call the `nn_module` factory object as a function, we are actually calling the `initialize` method that we defined earlier.
+Once we have defined the `Linear` `nn_module` we can now create an instance of it. When we call the `nn_module` factory object as a function, we are actually calling the `initialize` method that we defined earlier. (Or in `R6` classes idiom, we would be calling `$new()` method).
 
 ```{r nn2, exercise = TRUE, exercise.setup="nn"}
-linear <- Linear(in_feat = 10, out_feat = 1)
-linear
+lin <- Linear(in_feat = 10, out_feat = 1)
+lin
 ```
 
-We now have an instance of the `Linear` module that is called `linear`. We are now able to use this instance to actually perform the linear model computation on a tensor. We we use the instance as an R function, it will actually call the `forward` method that we defined earlier.
+We now have an instance of the `Linear` module that is called `lin`. We are now able to use this instance to actually perform the linear model computation on a tensor. We we use the instance as an R function but it will actually delegate to the `forward` method that we defined earlier.
 
 ```{r nn3, exercise=TRUE, exercise.setup="nn2"}
 x <- torch_randn(3, 10)
-linear(x)
+lin(x)
 ```
 
 ### Combining multiple modules
@@ -741,6 +760,13 @@ You can see that now the print method is showing the number of parameters of the
 mlp$parameters
 ```
 
+::: {.alert .alert-warning}
+
+In Torch there's no difference between module and models ie. an `nn_module` can be
+as low level as a ReLu activation or a much higher level ResNet model.
+
+:::
+
 ### Sequential modules
 
 When the `forward` method in the `nn_module` just calls the submodules in a sequence like in the `mlp` example, you can use the `nn_sequential` container to skip writing the `forward` method:
@@ -758,12 +784,16 @@ The `mlp` module defined here is equivalent to the one we wrote in the previous 
 
 ### Functional API
 
-Most `nn_*` modules have a `nnf_*` counterpart. These functions, for example `nnf_relu()` and `nn_relu()`.
+Most `nn_*` modules have a `nnf_*` counterpart, for example `nnf_relu()` and `nn_relu()`.
 
 Sometimes the functional API is more convenient, specially if the module counterpart does not include
 parameters, because it allows you to avoid initializing the module.
 
-Be careful with `nnf_*` functions when you want to have different behaviors between training and validation modes, for example `nnf_dropout()`. In those cases it's better to use the `nn_*` module counterpart.
+::: {.alert .alert-warning}
+
+Be careful with `nnf_*` functions when you want to have different behaviors between training and validation modes, for example `nnf_dropout()`. In those cases it's better to use the `nn_*` module counterpart, that will handle the training and evaluation mode internally.
+
+:::
 
 ### Example: training a linear model
 
@@ -828,7 +858,7 @@ To reload the model, use the `torch_load` function.
 
 Modify the above code chunks to fit a Multi layer perceptron instead of a linear model.
 
-## Datasets {data-progressive=TRUE}
+## Datasets and dataloaders {data-progressive=TRUE}
 
 `torch_dataset` is the object representing data in Torch. There are a few datasets that are already implemented in packages from the torch ecossystem and you can also implement your own.
 
@@ -836,7 +866,8 @@ Let's first take a look at the MNIST dataset available in the TorchVision packag
 
 We can create the dataset using the `mnist_dataset()` function. When we first run this function the dataset will be downloaded and cached in the path specified by the `root` argument.
 
-```{r}
+```{r mn, exercise=TRUE}
+# might take some time to run, because it downloads the dataset
 mnist <- mnist_dataset(root = "data-raw/mnist", download = TRUE)
 length(mnist)
 ```
@@ -844,7 +875,7 @@ length(mnist)
 The `length` function reports the number of observations in the dataset.
 We can also subset the dataset with:
 
-```{r}
+```{r mn1, exercise=TRUE, exercise.setup="mn"}
 str(mnist[1])
 ```
 
@@ -912,11 +943,11 @@ The `dataset()` function allows us to define data loading and pre-processing in 
 
 - It's common that datasets provides a `transform` argument in the `initialize` method that are applied as last step in the `.getitem`. This allows for the dataset user to specify additional pre-processing or data augmentation techniques that are specific to the task that it's used.
 
-## Dataloaders
+### Dataloaders
 
-Dataloaders are torch's abstraction used to iterate over datasets in batches and optionally shuffling and preparing data in parallel.
+Dataloaders are Torch's abstraction used to iterate over datasets in batches and optionally shuffling and preparing data in parallel.
 
-A Dataloader is created by passing a dataset to the `dataloader()` function.
+A Dataloader is created by passing a dataset instance to the `dataloader()` function.
 Let's take for example the MNIST dataset implemented in the TorchVision package:
 
 ```{r dl1, exercise = TRUE}
@@ -948,76 +979,49 @@ coro::loop(for (batch in dl) {
 total
 ```
 
-You can see `dataloaders` as an object similar to an R list with the important difference
+You can think of dataloaders as an object similar to an R list with the important difference
 that the elements are not actually computed yet, and they get computed every time you
 loop trough it.
 
-### Parallel data loading
+Dataloaders can optionally load data in parallel with minimal code changes.
+In general you only need to use the `num_workers` argument to specify the
+number of parallel R sessions that will be used to load data. Keep in mind that
+dataloaders take takes batches in parallel (not observations), so the time to 
+take the first batch should remain the same in both serial and parallel approaches
+and speedups can only be seen when taking multiple batches. Also note that, parallel
+processing adds overhead like initializing the R sessions and moving data between
+process so it's recommended to benchmark which approach is faster for your use case.
 
-Suppose that you need to do a time consuming computation every time you load an observation (eg. reading an image from the disk, resize and normalize it). 
+## Next steps
 
-A good way to speed this up is using a parallel
-dataloader that is able to load multiple batches at the same time so by the time 
-you used the first batch in your model, another batch will be already computed.
+This tutorial has presented a general overview of Torch and its components.
+You can now navigate trough Torch documentation available in the official
+[website](https://torch.mlverse.org). 
 
-Dataloaders provides a `num_workers` argument used to specify the number of parallel
-R sessions that are going to be used to load your data.
+You might be interested in reading the [Guess the correlation dataset tutorial](https://torch.mlverse.org/start/)
+for a fun introductory example about Torch and reading the RStudio AI blog with
+a number of end-to-end tutorials for different kind of problems. See the list below:
 
-Let's now write a small example, but first let's create a dummy dataset that simulates
-a long computation.
+### Image recognition
 
-```{r dl3, exercise = TRUE}
-dummy_dataset <- dataset(
-  initialize = function(time, n) {
-    self$time <- time
-    self$n <- n
-  },
-  .getitem = function(i) {
-    Sys.sleep(self$time)
-    list(x = torch_randn(28, 28), y = torch_randn(1))
-  },
-  .length = function() {
-    self$n
-  }
-)
+- [Bird classification](https://blogs.rstudio.com/ai/posts/2020-10-19-torch-image-classification/) is a multi-class classification task. In addition to being a blueprint for doing classification with torch, this introductory example shows how to load data, make use of pre-trained models, and benefit from learning rate schedulers.
 
-ds <- dummy_dataset(time = 0.1, n = 100)
-system.time({
-  ds[1]
-})
-```
+- [Brain image segmentation](https://blogs.rstudio.com/ai/posts/2020-11-30-torch-brain-segmentation/) builds a U-Net from scratch. This intermediate-level example is a great introduction to building your own modules, as well as custom datasets that perform data preprocessing and data augmentation for computer vision.
 
-Taking an observation of this dataset takes around `time = 0.01` seconds.
-Now let's use a serial dataloader to take 10 batches of size 10 of this dataset.
+### Tabular data
 
-```{r dl4, exercise = TRUE, exercise.setup="dl3"}
-dl <- dataloader(ds, batch_size = 10)
-system.time({
-  coro::loop(for(b in dl) {
-    a <- b
-  })
-})
-```
+- [Labeling poisonous mushrooms](https://blogs.rstudio.com/ai/posts/2020-11-03-torch-tabular/) is a first introduction to handling a mix of numerical and categorical data, using embedding modules for the latter. It also provides a blueprint for creating torch models from scratch.
 
-This takes around 10s as it's 10 (batches) x (10 obs per batch) * (0.1s per obs) + a small overhead.
-Now let's use a parallel dataloader by passing the `num_workers=2` argument.
-This will initialize `num_workers` R sessions, copy the dataset to each of them and 
-start loading batches in parallel.
+### Time series forecasting
 
-```{r dl5, exercise = TRUE, exercise.setup="dl3"}
-dl <- dataloader(ds, batch_size = 10, num_workers = 2)
-system.time({
-  coro::loop(for(b in dl) {
-    a <- b
-  })
-})
-```
+- [Introductory time-series forecasting with torch](https://blogs.rstudio.com/ai/posts/2021-03-10-forecasting-time-series-with-torch_1/) is a thorough introduction to RNNs (GRUs/LSTMs), explaining usage and terminology. [torch time series continued: A first go at multi-step prediction](https://blogs.rstudio.com/ai/posts/2021-03-11-forecasting-time-series-with-torch_2/) builds on this, and widens to the scope to multi-step-prediction.
 
-This should take a few seconds less. Like most parallel computation problems there's a
-small overhead for starting new sessions copying data between process, meaning 
-that it's not necessarily faster for problems when `.getitem` runs too fast, or you
-only have just a few batches - when the time for initializing the sessions don't
-compensate the runtime speedup you get for each obs.
+- [torch time series, take three: Sequence-to-sequence prediction](https://blogs.rstudio.com/ai/posts/2021-03-16-forecasting-time-series-with-torch_3/) and [torch time series, final episode: Attention](https://blogs.rstudio.com/ai/posts/2021-03-19-forecasting-time-series-with-torch_4/) expand on the prior two articles, introducing more advanced concepts like sequence-to-sequence processing and attention.
+
+- [Convolutional LSTM for spatial forecasting](https://blogs.rstudio.com/ai/posts/2020-12-17-torch-convlstm/) is an intermediate-level example that shows how to build a convolutional LSTM from scratch.
+
+
+
 
 
 
