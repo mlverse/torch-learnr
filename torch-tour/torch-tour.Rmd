@@ -57,10 +57,14 @@ if (inherits(e, "try-error")) {
   cat("Can we call something from torch? YES!", as.numeric(x), "\n")  
 }
 
-cat("Maybe require torch again just in case? ", require(torch))
+cat("Maybe require torch again just in case? ", require(torch), "\n")
 
-cat("Now setting torch seed")
-torch_manual_seed(1)
+cat("Now setting torch seed\n")
+e <- try(torch::torch_manual_seed(1))
+
+if (inherits(e, "try-error")) {
+  cat("Failed setting torch seed with: ", e)
+}
 
 cat("Now doing knitr stuff!")
 knitr::opts_chunk$set(echo = FALSE)
