@@ -147,13 +147,6 @@
       "Repository": "CRAN",
       "Hash": "e75525c55c70e5f4f78c9960a4b402e9"
     },
-    "curl": {
-      "Package": "curl",
-      "Version": "4.3.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c5e68405893f030f139f6d6675eac675"
-    },
     "digest": {
       "Package": "digest",
       "Version": "0.6.27",
@@ -315,16 +308,10 @@
     },
     "learnr": {
       "Package": "learnr",
-      "Version": "0.10.1.9009",
-      "Source": "GitHub",
-      "Remotes": "rstudio/htmltools, rstudio/shinytest",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "learnr",
-      "RemoteUsername": "rstudio",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "03a6db6be14ecbcff22bb7269fb17506cd814c05",
-      "Hash": "c5489ae3d59b7aaec20e2b0b28b2eaec"
+      "Version": "0.10.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ee4c94c586f032847b5ff679935f2ba4"
     },
     "lifecycle": {
       "Package": "lifecycle",
