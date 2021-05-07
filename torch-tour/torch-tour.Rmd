@@ -27,18 +27,21 @@ Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
 ```{r setup, include=FALSE}
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
-
+Sys.setenv(TORCH_LOG=1)
+cat("Torch tour logs\n")
 print(list.files(Sys.getenv("TORCH_HOME")))
-
-if (!torch::torch_is_installed() || length(list.files("libtorch/")) == 0)
-  torch::install_torch()
-
 library(learnr)
 library(torch)
 library(torchvision)
 library(ggplot2)
 library(tibble)
+cat("Libraries loaded\n")
+
 set.seed(1)
+
+if (torch:::.globals$lantern_started)
+  stop("Torch could not be started...")
+
 torch_manual_seed(1)
 knitr::opts_chunk$set(echo = FALSE)
 ```
