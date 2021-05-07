@@ -9,13 +9,6 @@
     ]
   },
   "Packages": {
-    "BH": {
-      "Package": "BH",
-      "Version": "1.72.0-3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8f9ce74c6417d61f0782cbae5fd2b7b0"
-    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-53",
@@ -60,10 +53,10 @@
     },
     "backports": {
       "Package": "backports",
-      "Version": "1.1.10",
+      "Version": "1.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "05ffd2d4acb51aee70f1de68ad7a6aed"
+      "Hash": "644043219fc24e190c2f620c1a380a69"
     },
     "base64enc": {
       "Package": "base64enc",
@@ -156,10 +149,10 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "4.3",
+      "Version": "4.3.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2b7d10581cc730804e9ed178c8374bd6"
+      "Hash": "c5e68405893f030f139f6d6675eac675"
     },
     "digest": {
       "Package": "digest",
@@ -170,10 +163,10 @@
     },
     "ellipsis": {
       "Package": "ellipsis",
-      "Version": "0.3.1",
+      "Version": "0.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "fd2844b3a43ae2d27e70ece2df1b4e2a"
+      "Hash": "bb0eec2fe32e88d9e2836c2f73ea2077"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -198,10 +191,10 @@
     },
     "fastmap": {
       "Package": "fastmap",
-      "Version": "1.0.1",
+      "Version": "1.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "83ab58a0518afe3d17e41da01af13b60"
+      "Hash": "77bd60a6157420d4ffa93b27cf6a58b8"
     },
     "fs": {
       "Package": "fs",
@@ -233,10 +226,10 @@
     },
     "highr": {
       "Package": "highr",
-      "Version": "0.8",
+      "Version": "0.9",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4dc5bb88961e347a0f4d8aad597cbfac"
+      "Hash": "8eb36c8125038e648e5d111c0d7b2ed4"
     },
     "htmltools": {
       "Package": "htmltools",
@@ -252,17 +245,17 @@
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
-      "Version": "1.5.1",
+      "Version": "1.5.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "41bace23583fbc25089edae324de2dc3"
+      "Hash": "6fdaa86d0700f8b3e92ee3c445a5a10d"
     },
     "httpuv": {
       "Package": "httpuv",
-      "Version": "1.5.4",
+      "Version": "1.6.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "4e6dabb220b006ccdc3b3b5ff993b205"
+      "Hash": "781248b864d00c390830504937fe5c29"
     },
     "isoband": {
       "Package": "isoband",
@@ -294,10 +287,10 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.31",
+      "Version": "1.33",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c3994c036d19fc22c5e2a209c8298bfb"
+      "Hash": "0bc1b5da1b0eb07cd4b727e95e9ff0b8"
     },
     "labeling": {
       "Package": "labeling",
@@ -308,10 +301,10 @@
     },
     "later": {
       "Package": "later",
-      "Version": "1.1.0.1",
+      "Version": "1.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d0a62b247165aabf397fded504660d8a"
+      "Hash": "b61890ae77fea19fc8acadd25db70aa4"
     },
     "lattice": {
       "Package": "lattice",
@@ -322,7 +315,7 @@
     },
     "learnr": {
       "Package": "learnr",
-      "Version": "0.10.1.9008",
+      "Version": "0.10.1.9009",
       "Source": "GitHub",
       "Remotes": "rstudio/htmltools, rstudio/shinytest",
       "RemoteType": "github",
@@ -330,8 +323,8 @@
       "RemoteRepo": "learnr",
       "RemoteUsername": "rstudio",
       "RemoteRef": "HEAD",
-      "RemoteSha": "2f2ba2fc492045d949594b34f3e49ecc87ec4b20",
-      "Hash": "ede1f6d43f7f6186b74fd1cb364e2158"
+      "RemoteSha": "03a6db6be14ecbcff22bb7269fb17506cd814c05",
+      "Hash": "c5489ae3d59b7aaec20e2b0b28b2eaec"
     },
     "lifecycle": {
       "Package": "lifecycle",
@@ -368,10 +361,10 @@
     },
     "mime": {
       "Package": "mime",
-      "Version": "0.9",
+      "Version": "0.10",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e87a35ec73b157552814869f45a63aa3"
+      "Hash": "26fa77e707223e1ce042b2b5d09993dc"
     },
     "munsell": {
       "Package": "munsell",
@@ -417,10 +410,10 @@
     },
     "promises": {
       "Package": "promises",
-      "Version": "1.1.1",
+      "Version": "1.2.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a8730dcbdd19f9047774909f0ec214a4"
+      "Hash": "4ab2c43adb4d4699cf3690acd378d75d"
     },
     "ps": {
       "Package": "ps",
@@ -438,30 +431,30 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.12.0",
+      "Version": "0.13.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "7340c71f46a0fd16506cfa804e224e44"
+      "Hash": "079cb1f03ff972b30401ed05623cbe92"
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.10",
+      "Version": "0.4.11",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "599df23c40a4fce9c7b4764f28c37857"
+      "Hash": "515f341d3affe0de9e4a7f762efb0456"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.7.4",
+      "Version": "2.7.14",
       "Source": "GitHub",
-      "Remotes": "yihui/tinytex",
+      "Remotes": "rstudio/sass, rstudio/bslib",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "rmarkdown",
       "RemoteUsername": "rstudio",
       "RemoteRef": "HEAD",
-      "RemoteSha": "a11240d78928a31d7e8aef3312709772715b8e91",
-      "Hash": "30d59418bbccfc51098ff470d9485f60"
+      "RemoteSha": "84ff469d6b5287700621f62fa1ca7857ac6aa914",
+      "Hash": "b81017f858a7d79a6c229976c97de74f"
     },
     "rprojroot": {
       "Package": "rprojroot",
@@ -521,10 +514,10 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.29",
+      "Version": "0.31",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f0b0ba735febac9a8344253ae6fa93f5"
+      "Hash": "25b572f764f3c19fef9aac33b5724f3d"
     },
     "torch": {
       "Package": "torch",
@@ -576,10 +569,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.20",
+      "Version": "0.22",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d7222684dc02327871e3b1da0aba7089"
+      "Hash": "eab2f8ba53809c321813e72ecbbd19ba"
     },
     "xtable": {
       "Package": "xtable",
