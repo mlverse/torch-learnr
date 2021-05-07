@@ -47,8 +47,22 @@ if (inherits(e, "try-error")) {
   cat("Failed starting lantern: ", e)
 }
 try(cat("Lantern is started now?? ", torch:::.globals$lantern_started, "\n"))
+
 cat("Lantern install path: ", torch:::install_path(), "\n")
+
+e <- try(x <- torch::torch_randn(1))
+if (inherits(e, "try-error")) {
+  cat("Can we call somethinf from torch? Failed calling torch with: ", e)
+} else {
+  cat("Can we call something from torch? YES!", as.numeric(x), "\n")  
+}
+
+cat("Maybe require torch again just in case? ", require(torch))
+
+cat("Now setting torch seed")
 torch_manual_seed(1)
+
+cat("Now doing knitr stuff!")
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
