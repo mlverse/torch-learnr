@@ -39,7 +39,7 @@ cat("Libraries loaded\n")
 
 set.seed(1)
 
-if (torch:::.globals$lantern_started)
+if (!torch:::.globals$lantern_started)
   stop("Torch could not be started...")
 
 torch_manual_seed(1)
