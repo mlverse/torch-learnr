@@ -40,11 +40,8 @@ try(print(torch:::.globals$lantern_started))
 print(torch:::install_path())
 print(list.files(torch:::install_path()))
 cat("Trying to load lantern again -*-*-*-*-*\n")
-tryCatch({torch:::lantern_start()}, error = function(e) {
-  cat("Lantern loading failed ********************\n")
-  print(e)
-  cat("\n")
-})
+try(torch:::lantern_start())
+print(.Last.value)
 torch_manual_seed(1)
 knitr::opts_chunk$set(echo = FALSE)
 ```
