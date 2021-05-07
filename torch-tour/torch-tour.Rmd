@@ -36,15 +36,9 @@ library(torchvision)
 library(ggplot2)
 library(tibble)
 cat("Libraries loaded\n")
-
 set.seed(1)
-
-if (is.null(torch:::.globals$lantern_started) || !torch:::.globals$lantern_started) {
-  print(torch:::install_path())
-  print(list.files(torch:::install_path()))
-  stop("Torch could not be started...")
-}
-  
+print(torch:::install_path())
+print(list.files(torch:::install_path()))
 torch_manual_seed(1)
 knitr::opts_chunk$set(echo = FALSE)
 ```
