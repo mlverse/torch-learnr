@@ -42,7 +42,7 @@ print(list.files(torch:::install_path()))
 cat("Trying to load lantern again -*-*-*-*-*\n")
 tryCatch({torch:::lantern_start()}, error = function(e) {
   cat("Lantern loading failed ********************\n")
-  cat(e)
+  print(e)
   cat("\n")
 })
 torch_manual_seed(1)
