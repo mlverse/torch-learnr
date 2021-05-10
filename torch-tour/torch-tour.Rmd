@@ -1,5 +1,5 @@
 ---
-title: "A tour of Torch"
+title: "A tour of torch"
 tutorial:
   version: 0.0.1
 output: 
@@ -30,7 +30,7 @@ Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
 ```{r setup, include=FALSE}
 Sys.setenv(TORCH_INSTALL=1)
 Sys.setenv(TORCH_HOME=path.expand("libtorch/"))
-cat("Torch tour logs\n")
+cat("torch tour logs\n")
 library(learnr)
 library(torch)
 library(torchvision)
@@ -75,7 +75,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## What is torch?
 
-**Torch** is an R package with 2 core features:
+**torch** is an R package with 2 core features:
 
 -   Array computation with strong GPU acceleration
 
@@ -85,13 +85,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ::: {.row}
 ::: {.col-md-6}
--   Torch is based on PyTorch, a framework with rapidly increasing
+-   torch is based on Pytorch, a framework with rapidly increasing
     popularity among deep learning researchers.
 
 -   We believe others can use torch's GPU acceleration to implement fast
     machine learning algorithms using its convenient interface.
 
--   Torch is flexible and has a low level API, making it useful for a
+-   torch is flexible and has a low level API, making it useful for a
     vast range of use cases, not only for deep learning.
 
     </div>
@@ -110,7 +110,7 @@ is implemented in R.
 
 ::: {.row}
 ::: {.col-md-6}
--   Almost all `torch_*` functions are auto-generated from LibTorch's
+-   Almost all `torch_*` functions are auto-generated from Libtorch's
     declaration file. This means that all low level operations are
     automatically available in the R package.
 
@@ -118,12 +118,12 @@ is implemented in R.
     is written in R. It's easy to inspect the code and use it to write
     your own customizations.
 
--   The diagram on the right shows LibTorch at the bottom, and above it
+-   The diagram on the right shows Libtorch at the bottom, and above it
     all the layers implemented to allow using torch from R.
 
 -   In contrast to TensorFlow for R, which is built on top of the Python
-    implementation via `reticulate`, torch is built on top of LibTorch,
-    the C++ API of PyTorch. Thus, `torch` has no Python dependency.
+    implementation via `reticulate`, torch is built on top of Libtorch,
+    the C++ API of Pytorch. Thus, `torch` has no Python dependency.
 
     </div>
 
@@ -135,7 +135,7 @@ is implemented in R.
 
 ### Installation
 
-The Torch R package is available on CRAN and can be installed with:
+The torch R package is available on CRAN and can be installed with:
 
     install.packages("torch")
 
@@ -146,7 +146,7 @@ See our [installation
 guide](https://torch.mlverse.org/docs/articles/installation.html) for
 more information.
 
-## Torch components
+## torch components
 
 The torch package has a few core components that we will discuss in this
 tutorial.
@@ -162,7 +162,7 @@ Some of the components can be classified as low-level. For example:
 -   **Tensors**: a multi-dimensional array container. Tensors are used
     to represent data and parameters in torch.
 
--   **Array computation library**: Torch includes more than 200
+-   **Array computation library**: torch includes more than 200
     functions that can be used to transform tensors, including
     mathematical operations, structure transformations, etc.
 
@@ -170,7 +170,7 @@ Some of the components can be classified as low-level. For example:
     operations. This is essential in allowing torch to be used for
     machine learning.
 
-Torch also provides higher level abstractions that make it easier to
+torch also provides higher level abstractions that make it easier to
 build larger programs:
 
 -   **Neural network modules**: `nn_modules` are a higher level
@@ -245,7 +245,7 @@ Feel free to experiment with other initialization functions below:
 
 ### Converting back to R
 
-Torch provides methods to convert tensors back to R.
+torch provides methods to convert tensors back to R.
 
 ```{r backr, exercise=TRUE}
 # as.array is the most general method and allows
@@ -394,7 +394,7 @@ x[-1]
 
 ### Selecting intervals
 
-Torch also supports indexing tensors by interval, using boolean and
+torch also supports indexing tensors by interval, using boolean and
 integer tensors, as well as R vectors. See the examples below:
 
 ```{r index4, exercise=TRUE}
@@ -467,7 +467,7 @@ x[1,1,1]
 
 ## Array computation {data-progressive="TRUE"}
 
-Torch provides more than 200 functions and methods that operate on
+torch provides more than 200 functions and methods that operate on
 tensors. They range from mathematical operations to utilities for
 reshaping and modifying tensors.
 
@@ -530,7 +530,7 @@ operation instead.
 ### Broadcasting
 
 Broadcasting allows us to use tensors of different shapes when executing
-binary/arithmetic operations. Torch follows the same broadcasting rules
+binary/arithmetic operations. torch follows the same broadcasting rules
 as Numpy, and we recommend reading [this
 article](https://numpy.org/doc/stable/user/theory.broadcasting.html#array-broadcasting-in-numpy)
 for a more detailed explanation.
@@ -678,7 +678,7 @@ ggplot(df, aes(x = x, y = y)) +
 
 ## Optimizers
 
-Torch optimizers are torch's abstraction to encapsulate weight-updating
+torch optimizers are torch's abstraction to encapsulate weight-updating
 logic. There are a few readily available optimizers, like *Adam*,
 *Adagrad* and *SGD*, but it's also possible to create custom optimizers.
 
@@ -759,7 +759,7 @@ actual transformations.
 
 ### Implemented `nn_module`s
 
-Torch provides implementations of many of the most common neural network
+torch provides implementations of many of the most common neural network
 layers, like convolutional, recurrent, pooling and activation layers, as
 well as common loss functions.
 
@@ -813,7 +813,7 @@ linear$bias
 linear$to(device = "cpu")
 ```
 
-Torch has many built-in `nn_modules` that commonly used. For example:
+torch has many built-in `nn_modules` that commonly used. For example:
 
 -   `nn_conv2d`: Applies a 2D convolution over an input signal composed
     of several input planes.
@@ -925,7 +925,7 @@ mlp$parameters
 ```
 
 ::: {.alert .alert-warning}
-In Torch there's no difference between module and models, i.e., an
+In torch there's no difference between module and models, i.e., an
 `nn_module` can be as low-level as a ReLu activation, or a much
 higher-level ResNet model.
 :::
@@ -1033,7 +1033,7 @@ a linear model.
 
 ## Datasets and dataloaders {data-progressive="TRUE"}
 
-`torch_dataset` is the object representing data in Torch. There are a
+`torch_dataset` is the object representing data in torch. There are a
 few datasets that are already implemented in the torch ecosystem, and
 you can also implement your own.
 
@@ -1152,7 +1152,7 @@ Here are a few common patterns used when creating datasets in torch.
 
 ### Dataloaders
 
-Dataloaders are Torch's abstraction used to iterate over datasets in
+Dataloaders are torch's abstraction used to iterate over datasets in
 batches, and optionally shuffle and prepare data in parallel.
 
 A dataloader is created by passing a dataset instance to the
@@ -1209,13 +1209,13 @@ benchmark which approach is faster for your use case.
 
 ## Next steps
 
-This tutorial has presented a general overview of Torch and its
-components. You can now navigate through the Torch documentation
+This tutorial has presented a general overview of torch and its
+components. You can now navigate through the torch documentation
 available on the official [website](https://torch.mlverse.org).
 
 You might be interested in reading the [Guess the correlation dataset
 tutorial](https://torch.mlverse.org/start/) for a fun introductory
-example about Torch, and browsing the RStudio AI blog for a number of
+example about torch, and browsing the RStudio AI blog for a number of
 end-to-end tutorials for different kind of problems. See the list below:
 
 ### Image recognition
