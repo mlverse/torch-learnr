@@ -638,7 +638,7 @@ There are 3 **very important** details when updating the weights:
 3.  We must manually erase the gradients that we just used to update the
     tensors, usually by setting them to zero. This must also happen
     in-place, by using, for example, `x$grad$zero_()`. By default torch
-    accumulates gradients after backward, and in general we don't want
+    accumulates gradients after backward, and in general we want
     to start afresh the gradient accumulation after the weight update.
 
 The torch `optim_` functions will help us not having to remember all the
@@ -847,7 +847,7 @@ can be applied.
 
 In this chunk we define an `nn_module`. Defining an `nn_module` is
 similar to defining a function, in the sense that no actual computation
-happens at that time. The returned object is what we call a 'factory' of
+happens at that time. The returned object is what we call a 'constructor' of
 instances of that module.
 
 ```{r nn, exercise=TRUE}
