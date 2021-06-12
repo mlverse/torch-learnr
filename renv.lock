@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.3",
+    "Version": "4.1.0",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -81,10 +81,16 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.2.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "4830a372b241d78ed6f53731ee3023ac"
+      "Version": "0.2.5.9001",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "rstudio",
+      "RemoteRepo": "bslib",
+      "RemoteRef": "master",
+      "RemoteSha": "ae5e994cf9ac61d1500d7f4e94817a6e0d1cd716",
+      "Remotes": "rstudio/htmltools",
+      "Hash": "95bdd223db9180040e079a3108d2b27f"
     },
     "cachem": {
       "Package": "cachem",
@@ -146,6 +152,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "e75525c55c70e5f4f78c9960a4b402e9"
+    },
+    "curl": {
+      "Package": "curl",
+      "Version": "4.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c5e68405893f030f139f6d6675eac675"
     },
     "digest": {
       "Package": "digest",
@@ -226,15 +239,16 @@
     },
     "htmltools": {
       "Package": "htmltools",
-      "Version": "0.5.1.9000",
+      "Version": "0.5.1.9005",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "htmltools",
       "RemoteUsername": "rstudio",
+      "RemoteRepo": "htmltools",
       "RemoteRef": "master",
-      "RemoteSha": "e7f0393e3bc89cc76ba34fc2fab5536f47837247",
-      "Hash": "196479fa5107bfc48c21dc0776097eeb"
+      "RemoteSha": "7fbab163b0badb7f48c2bbafb56a2886fc951976",
+      "Remotes": "r-lib/rlang",
+      "Hash": "bd27c5977557404df807f3bbefc7339c"
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
@@ -308,10 +322,16 @@
     },
     "learnr": {
       "Package": "learnr",
-      "Version": "0.10.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ee4c94c586f032847b5ff679935f2ba4"
+      "Version": "0.10.1.9009",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "rstudio",
+      "RemoteRepo": "learnr",
+      "RemoteRef": "master",
+      "RemoteSha": "b4e9fb2bf807e10cbce88ce57765e2675c181d9a",
+      "Remotes": "rstudio/htmltools, rstudio/shinytest",
+      "Hash": "d84df6f815372aaa472db257130db4a9"
     },
     "lifecycle": {
       "Package": "lifecycle",
@@ -425,17 +445,22 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.11",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "515f341d3affe0de9e4a7f762efb0456"
+      "Version": "0.4.11.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "r-lib",
+      "RemoteRepo": "rlang",
+      "RemoteRef": "master",
+      "RemoteSha": "b501cf763097f796f90982dead5e646bdd9dd3f0",
+      "Hash": "6c84dfb4fad0cfee9780d5982a239687"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
       "Version": "2.7.14",
       "Source": "GitHub",
-      "Remotes": "rstudio/sass, rstudio/bslib",
       "RemoteType": "github",
+      "Remotes": "rstudio/sass, rstudio/bslib",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "rmarkdown",
       "RemoteUsername": "rstudio",
@@ -452,10 +477,15 @@
     },
     "sass": {
       "Package": "sass",
-      "Version": "0.3.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "3ef1adfe46b7b144b970d74ce33ab0d6"
+      "Version": "0.4.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "rstudio",
+      "RemoteRepo": "sass",
+      "RemoteRef": "master",
+      "RemoteSha": "f14841535e3a2481a87f4ffd34d88820a9c51b2f",
+      "Hash": "07bf5a82ef8a9ce75db7e53536d1630f"
     },
     "scales": {
       "Package": "scales",
@@ -517,8 +547,8 @@
       "Package": "torchvision",
       "Version": "0.2.0.9000",
       "Source": "GitHub",
-      "Remotes": "mlverse/torch",
       "RemoteType": "github",
+      "Remotes": "mlverse/torch",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "torchvision",
       "RemoteUsername": "mlverse",
@@ -535,10 +565,10 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.3.6",
+      "Version": "0.3.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "5cf1957f93076c19fdc81d01409d240b"
+      "Hash": "ecf749a1b39ea72bd9b51b76292261f1"
     },
     "viridisLite": {
       "Package": "viridisLite",
