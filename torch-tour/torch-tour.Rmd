@@ -53,7 +53,7 @@ try(cat("Lantern is started now?? ", torch:::.globals$lantern_started, "\n"))
 
 cat("Lantern install path: ", torch:::install_path(), "\n")
 
-e <- try(x <- torch::torch_randn(1))
+e <- try(xyzwa <- torch::torch_randn(1))
 if (inherits(e, "try-error")) {
   cat("Can we call somethinf from torch? Failed calling torch with: ", e)
 } else {
