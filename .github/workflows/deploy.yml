@@ -42,5 +42,7 @@ jobs:
           install.packages("rsconnect")
           rsconnect::setAccountInfo(name='mlverse', token=Sys.getenv("SHINY_TOKEN"),secret=Sys.getenv("SHINY_SECRET"))
           rsconnect::deployApp('torch-tour/', appName = "torch-tour")
+          rsconnect::deployApp('tutorial-useR-2021/en/', appName = "tutorial-useR-2021-en")
+          rsconnect::deployApp('tutorial-useR-2021/fr/', appName = "tutorial-useR-2021-fr")
           
           
